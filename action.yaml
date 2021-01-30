@@ -3,6 +3,7 @@
 # Pull from https://stackoverflow.com/a/61574295
 
 name: Gitstart Pull Upstream
+description: This GitHub action will make sure that your main branch is up-to-date with your upstream repo.
 on:
   workflow_dispatch:
   schedule:

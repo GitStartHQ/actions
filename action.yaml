@@ -17,7 +17,7 @@ runs:
         git pull --unshallow
         git remote add upstream ${{inputs.upstream_url}}
         git checkout main
-        git pull upstream main # configure
+        git pull upstream ${{inputs.upstream_branch}}
         git reset --hard upstream/${{inputs.upstream_branch}}
-        git push -f origin upstream/${{inputs.upstream_branch}} 
+        git push -f origin main
       shell: bash

@@ -13,7 +13,7 @@ runs:
         git pull --unshallow
         git remote add upstream ${{inputs.upstream}}
         git fetch upstream
-        git checkout main
+        git checkout upstream/main
         git reset upstream/main
         git push -f origin main
       shell: bash

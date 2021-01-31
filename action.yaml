@@ -16,3 +16,4 @@ runs:
         git checkout main
         git reset upstream/main
         git push -f origin main
+      shell: bash

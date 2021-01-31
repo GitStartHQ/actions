@@ -1,8 +1,11 @@
 name: "Gitstart Pull"
 description: "An action to keep you fork repo up-to-date with upstream"
 inputs:
-  upstream:
+  upstream_url:
     description: URL of the Repo which you are forking
+    required: true
+  upstream_branch:
+    description: Main Branch of the repo you are forking
     required: true
 runs:
   using: "composite"

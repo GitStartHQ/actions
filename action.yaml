@@ -16,5 +16,5 @@ runs:
         git checkout main
         git pull upstream main # configure
         git reset --hard upstream/main
-        git push -f origin main 
+        git push -f origin upstream/main 
       shell: bash

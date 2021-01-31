@@ -12,9 +12,9 @@ runs:
         git config --global user.name 'gitstart'
         git config --global user.email 'gitstart@users.noreply.github.com'
         git pull --unshallow
-        git remote add upstream ${{inputs.upstream}}
+        git remote add upstream ${{inputs.upstream_url}}
         git checkout main
         git pull upstream main # configure
-        git reset --hard upstream/main
-        git push -f origin upstream/main 
+        git reset --hard upstream/${{inputs.upstream_branch}}
+        git push -f origin upstream/${{inputs.upstream_branch}} 
       shell: bash

@@ -8,6 +8,7 @@ runs:
   using: "composite"
   steps:
     - run: |
+        set -o xtrace -e
         git config --global user.name 'gitstart'
         git config --global user.email 'gitstart@users.noreply.github.com'
         git pull --unshallow

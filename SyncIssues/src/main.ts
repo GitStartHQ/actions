@@ -27,14 +27,15 @@ async function main(): Promise<void> {
 
     await Promise.all(
       issues.map(async issue => {
-        const url = issue.url
+        const url = issue.html_url
         console.log('finding issue for: ', url)
         const currentIssue = currentIssues.find(
           issue => issue.body.indexOf(url) !== -1
         )
-        const body = issue.body + '\n' + 'Duplicates and fixed by ' + issue.url
+        const body =
+          issue.body + '\n' + 'Duplicates and fixed by ' + issue.html_url
         if (currentIssue) {
-          console.log('found issue. updating: ', currentIssue.url)
+          console.log('found issue. updating: ', currentIssue.html_url)
           await github.issues.update({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -51,7 +52,7 @@ async function main(): Promise<void> {
               title: issue.title
             })
           ).data
-          console.log('created a new issue at: ', newIssue.url)
+          console.log('created a new issue at: ', newIssue.html_url)
         }
       })
     )

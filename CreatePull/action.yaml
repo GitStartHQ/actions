@@ -1,19 +1,19 @@
 name: "Create Pull"
 description: "An action to create a pull create inside orignal Repo"
 inputs:
-  owner:
+  upstream_owner:
     description: Orignal ower of the repo.
     required: true
-  branch:
+  forked_branch:
     description: Your branch which you are going to create a PR against.
     required: true
   token:
     description: Your Github Token
     required: true
-  repo:
+  upstream_repo:
     description: The name of your repo
     required: true
-  base:
+  upstream_branch:
     description: The default branch of owner. This would be the one which you are going to create a pull request against
     required: true
 runs:

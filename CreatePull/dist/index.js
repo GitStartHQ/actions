@@ -2472,7 +2472,7 @@ async function main() {
         });
         console.log('payload', payload);
         const pullRequest = await github.pulls.list({
-            owner: owner,
+            owner: 'gitstart',
             repo: repo,
             head: `gitstart:${branch}`
         });

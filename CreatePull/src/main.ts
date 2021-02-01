@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {context, getOctokit} from '@actions/github'
+import {getOctokit} from '@actions/github'
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError)

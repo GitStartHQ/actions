@@ -1,23 +1,25 @@
 {
-  "name": "gitstart-greatepull",
-  "description": "A GitHub action for executing a simple script to create a PR",
+  "name": "gitstart-actions",
+  "description": "",
   "version": "1.0.0",
   "author": "GitStart",
   "license": "MIT",
   "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "build": "ncc build src/main.ts",
-    "format:check": "prettier --check src",
-    "format:write": "prettier --write src",
-    "lint": "eslint src",
+    "build:create-pull": "ncc build CreatePull/src/main.ts -o CreatePull/dist",
+    "build:sync-issues": "ncc build SyncIssues/src/main.ts -o SyncIssues/dist",
+    "build": "npm run build:create-pull && npm run build:sync-issues",
+    "format:check": "prettier --check **/*.ts",
+    "format:write": "prettier --write **/*.ts",
+    "lint": "eslint **/*.ts",
     "style:check": "run-p --continue-on-error --aggregate-output format:check lint",
     "style:write": "run-p --continue-on-error --aggregate-output format:write lint",
     "pre-commit": "run-s style:write build"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run pre-commit && git add dist/"
+      "pre-commit": "npm run pre-commit && git add ."
     }
   },
   "dependencies": {

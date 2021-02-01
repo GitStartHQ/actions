@@ -15,14 +15,14 @@ async function main(): Promise<void> {
 
   try {
     const payload = await github.pulls.list({
-      owner: "gitstart",
+      owner: 'gitstart',
       repo: repo,
       head: `gitstart:${branch}`
     })
 
     console.log('payload', payload)
     const pullRequest = await github.pulls.list({
-    owner: owner,
+      owner: owner,
       repo: repo,
       head: `gitstart:${branch}`
     })

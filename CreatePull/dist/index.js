@@ -2470,11 +2470,13 @@ async function main() {
             repo: repo,
             head: `gitstart:${branch}`
         });
+        console.log('payload', payload);
         const pullRequest = await github.pulls.list({
             owner: owner,
             repo: repo,
             head: `gitstart:${branch}`
         });
+        console.log('pullRequest', pullRequest);
         if (!pullRequest.data.length) {
             await github.pulls.create({
                 owner: 'GitStartHQ',
@@ -2487,6 +2489,7 @@ async function main() {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
     }
     catch (e) {
+        console.error(e);
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(JSON.stringify(e));
     }
 }

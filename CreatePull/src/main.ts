@@ -20,11 +20,13 @@ async function main(): Promise<void> {
       head: `gitstart:${branch}`
     })
 
+      console.log("payload", payload)
     const pullRequest = await github.pulls.list({
       owner: owner,
       repo: repo,
       head: `gitstart:${branch}`
     })
+    console.log("pullRequest", pullRequest)
 
     if (!pullRequest.data.length) {
       await github.pulls.create({
@@ -37,6 +39,7 @@ async function main(): Promise<void> {
     }
     core.setOutput('result', 'Success')
   } catch (e) {
+      console.error(e)
     core.error(JSON.stringify(e))
   }
 }

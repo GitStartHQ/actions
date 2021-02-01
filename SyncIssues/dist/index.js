@@ -7161,7 +7161,7 @@ async function main() {
             forked_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo
         };
         const queryString = new URLSearchParams(object).toString();
-        await axios__WEBPACK_IMPORTED_MODULE_2___default().get(`https://hooks-pr-1124.onrender.com/api/github/actions/open_source/sync_issues?${queryString}`);
+        await axios__WEBPACK_IMPORTED_MODULE_2___default().get(`https://hooks.gitstart.dev/api/github/actions/open_source/sync_issues?${queryString}`);
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
     }
     catch (e) {

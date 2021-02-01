@@ -7319,7 +7319,7 @@ async function main() {
             forked_branch
         };
         const queryString = new URLSearchParams(object).toString();
-        await axios__WEBPACK_IMPORTED_MODULE_2___default().get(`https://hooks-pr-1124.onrender.com/api/github/actions/open_source/sync_pull_requests?${queryString}`);
+        await axios__WEBPACK_IMPORTED_MODULE_2___default().get(`https://hooks.gitstart.dev/api/github/actions/open_source/sync_pull_requests?${queryString}`);
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
     }
     catch (e) {

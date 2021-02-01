@@ -28,7 +28,9 @@ async function main(): Promise<void> {
       issues.map(async issue => {
         const url = issue.url
         console.log('finding issue for: ', url)
-        const currentIssue = currentIssues.find(issue => issue.body.indexOf(url) !== -1)
+        const currentIssue = currentIssues.find(
+          issue => issue.body.indexOf(url) !== -1
+        )
         const body = issue.body + '\n' + 'Duplicates and fixed by ' + issue.url
         if (currentIssue) {
           console.log('found issue. updating: ', currentIssue.url)

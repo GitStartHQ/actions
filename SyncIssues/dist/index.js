@@ -4670,16 +4670,18 @@ async function main() {
         const issues = searchIssues.data.items;
         const currentIssues = searchCurrentIssues.data;
         await Promise.all(issues.map(async (issue) => {
-            const url = issue.url;
+            const url = issue.html_url;
             console.log('finding issue for: ', url);
             const currentIssue = currentIssues.find(issue => issue.body.indexOf(url) !== -1);
-            const body = issue.body + '\n' + 'Duplicates and fixed by ' + issue.url;
+            const body = issue.body + '\n' + 'Duplicates and fixed by ' + issue.html_url;
             if (currentIssue) {
-                console.log('found issue. updating: ', currentIssue.url);
+                console.log('found issue. updating: ', currentIssue.html_url, ' with body ', body);
                 await github.issues.update({
                     owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
                     repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
                     issue_number: currentIssue.number,
+                    title: issue.title,
+                    labels: issue.labels.map(lb => lb.name),
                     body,
                     assignee: 'gitstart'
                 });
@@ -4689,9 +4691,11 @@ async function main() {
                     owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
                     repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
                     body,
-                    title: issue.title
+                    labels: issue.labels.map(lb => lb.name),
+                    title: issue.title,
+                    assignee: 'gitstart'
                 })).data;
-                console.log('created a new issue at: ', newIssue.url);
+                console.log('created a new issue at: ', newIssue.html_url);
             }
         }));
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');

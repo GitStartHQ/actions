@@ -20,7 +20,7 @@ async function main(): Promise<void> {
     }
     const queryString = new URLSearchParams(object).toString()
     await axios.get(
-      `https://hooks-pr-1124.onrender.com/api/github/actions/open_source/sync_issues?${queryString}`
+      `https://hooks.gitstart.dev/api/github/actions/open_source/sync_issues?${queryString}`
     )
     core.setOutput('result', 'Success')
   } catch (e) {

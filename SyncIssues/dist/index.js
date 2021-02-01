@@ -4664,7 +4664,8 @@ async function main() {
         });
         const searchCurrentIssues = await github.issues.listForRepo({
             owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
-            repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo
+            repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
+            state: 'open'
         });
         const issues = searchIssues.data.items;
         const currentIssues = searchCurrentIssues.data;

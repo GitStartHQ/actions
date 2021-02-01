@@ -18,7 +18,8 @@ async function main(): Promise<void> {
 
     const searchCurrentIssues = await github.issues.listForRepo({
       owner: context.repo.owner,
-      repo: context.repo.repo
+      repo: context.repo.repo,
+      state: 'open'
     })
 
     const issues = searchIssues.data.items

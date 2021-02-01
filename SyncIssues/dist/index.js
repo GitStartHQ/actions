@@ -7151,7 +7151,7 @@ main().catch(handleError);
 async function main() {
     const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('token', { required: true });
     const upstream_owner = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_owner', { required: true });
-    const upstream_repo = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('repo', { required: true });
+    const upstream_repo = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_repo', { required: true });
     try {
         const object = {
             token,

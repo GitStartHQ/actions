@@ -10,30 +10,12 @@ inputs:
   token:
     description: Your Github Token
     required: true
+  repo:
+    description: The name of your repo
+    required: true
+  base:
+    description: The default branch of owner. This would be the one which you are going to create a pull request against
+    required: true
 runs:
-  using: "composite"
-  steps:
-    - id: js-script
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{inputs.token}}
-        script: |
-          const payload = await github.pulls.list({
-            owner: context.payload.repository.owner.login,
-            repo: context.payload.repository.name,
-            head: "gitstart:${{ inputs.branch }}"
-          })
-          const pullRequest = await github.pulls.list({
-            owner: ${{inputs.owner}},
-            repo: context.payload.repository.name,
-            head: "gitstart:${{ inputs.branch }}"
-          })
-          if (!pullRequest.data.length) {
-             await github.pulls.create({
-               owner: ${{inputs.owner}},
-               title: payload.data[0].title,
-               repo: context.payload.repository.name,
-               head: "gitstart:${{ github.event.inputs.branch }}",
-               base: "main",
-             })
-           }
+  using: node12
+  main: dist/index.js

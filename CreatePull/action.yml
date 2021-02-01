@@ -1,0 +1,40 @@
+name: "Create Pull"
+description: "An action to create a pull create inside orignal Repo"
+inputs:
+  owner:
+    description: Orignal ower of the repo.
+    required: true
+  branch:
+    description: Your branch which you are going to create a PR against.
+    required: true
+  token:
+    description: Your Github Token
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - id: js-script
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{inputs.token}}
+        script: |
+          const payload = await github.pulls.list({
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            head: "gitstart:${{ inputs.branch }}"
+          })
+          const pullRequest = await github.pulls.list({
+            owner: ${{inputs.owner}},
+            repo: context.payload.repository.name,
+            head: "gitstart:${{ inputs.branch }}"
+          })
+          if (!pullRequest.data.length) {
+             await github.pulls.create({
+               owner: ${{inputs.owner}},
+               title: payload.data[0].title,
+               repo: context.payload.repository.name,
+               head: "gitstart:${{ github.event.inputs.branch }}",
+               base: "main",
+             })
+           }

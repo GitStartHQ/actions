@@ -1,71 +1,27 @@
 import * as core from '@actions/core'
-import {context, getOctokit} from '@actions/github'
+import {context} from '@actions/github'
+import axios from 'axios'
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError)
 
 async function main(): Promise<void> {
   const token = core.getInput('token', {required: true})
-  const owner = core.getInput('owner', {required: true})
-  const repo = core.getInput('repo', {required: true})
-
-  const github = getOctokit(token)
+  const upstream_owner = core.getInput('upstream_owner', {required: true})
+  const upstream_repo = core.getInput('repo', {required: true})
 
   try {
-    const searchIssues = await github.search.issuesAndPullRequests({
-      q: `is:open is:issue mentions:gitstart archived:false repo:${owner}/${repo}`
-    })
-
-    const searchCurrentIssues = await github.issues.listForRepo({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      state: 'open'
-    })
-
-    const issues = searchIssues.data.items
-    const currentIssues = searchCurrentIssues.data
-
-    await Promise.all(
-      issues.map(async issue => {
-        const url = issue.html_url
-        console.log('finding issue for: ', url)
-        const currentIssue = currentIssues.find(
-          issue => issue.body.indexOf(url) !== -1
-        )
-        const body =
-          issue.body + '\n' + 'Duplicates and fixed by ' + issue.html_url
-        if (currentIssue) {
-          console.log(
-            'found issue. updating: ',
-            currentIssue.html_url,
-            ' with body ',
-            body
-          )
-          await github.issues.update({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: currentIssue.number,
-            title: issue.title,
-            labels: issue.labels.map(lb => lb.name),
-            body,
-            assignee: 'gitstart'
-          })
-        } else {
-          const newIssue = (
-            await github.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body,
-              labels: issue.labels.map(lb => lb.name),
-              title: issue.title,
-              assignee: 'gitstart'
-            })
-          ).data
-          console.log('created a new issue at: ', newIssue.html_url)
-        }
-      })
+    const object = {
+      token,
+      upstream_owner,
+      upstream_repo,
+      forked_owner: context.repo.owner,
+      forked_repo: context.repo.repo
+    }
+    const queryString = new URLSearchParams(object).toString()
+    await axios.get(
+      `https://hooks-pr-1124.onrender.com/api/github/actions/open_source/sync_issues?${queryString}`
     )
-
     core.setOutput('result', 'Success')
   } catch (e) {
     console.error(e)

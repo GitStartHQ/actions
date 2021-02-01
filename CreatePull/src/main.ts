@@ -1,42 +1,31 @@
 import * as core from '@actions/core'
-import {getOctokit} from '@actions/github'
+import {context} from '@actions/github'
+import axios from 'axios'
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError)
 
 async function main(): Promise<void> {
   const token = core.getInput('token', {required: true})
-  const branch = core.getInput('branch', {required: true})
-  const owner = core.getInput('owner', {required: true})
-  const repo = core.getInput('repo', {required: true})
-  const base = core.getInput('base', {required: true})
-
-  const github = getOctokit(token)
+  const upstream_owner = core.getInput('upstream_owner', {required: true})
+  const upstream_repo = core.getInput('upstream_repo', {required: true})
+  const upstream_branch = core.getInput('upstream_branch', {required: true})
+  const forked_branch = core.getInput('forked_branch', {required: true})
 
   try {
-    const payload = await github.pulls.list({
-      owner: 'gitstart',
-      repo: repo,
-      head: `gitstart:${branch}`
-    })
-
-    console.log('payload', payload)
-    const pullRequest = await github.pulls.list({
-      owner: owner,
-      repo: repo,
-      head: `gitstart:${branch}`
-    })
-    console.log('pullRequest', pullRequest)
-
-    if (!pullRequest.data.length) {
-      await github.pulls.create({
-        owner: owner,
-        title: payload.data[0].title,
-        repo: repo,
-        head: `gitstart:${branch}`,
-        base: base
-      })
+    const object = {
+      token,
+      upstream_owner,
+      upstream_repo,
+      forked_owner: context.repo.owner,
+      upstream_branch,
+      forked_repo: context.repo.repo,
+      forked_branch
     }
+    const queryString = new URLSearchParams(object).toString()
+    await axios.get(
+      `https://hooks-pr-1124.onrender.com/api/github/actions/open_source/sync_pull_requests?${queryString}`
+    )
     core.setOutput('result', 'Success')
   } catch (e) {
     console.error(e)

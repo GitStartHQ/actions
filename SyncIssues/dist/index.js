@@ -4679,7 +4679,7 @@ async function main() {
                 await github.issues.update({
                     owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
                     repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
-                    issue_number: issue.number,
+                    issue_number: currentIssue.number,
                     body,
                     assignee: 'gitstart'
                 });

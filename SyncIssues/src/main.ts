@@ -38,7 +38,7 @@ async function main(): Promise<void> {
           await github.issues.update({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: issue.number,
+            issue_number: currentIssue.number,
             body,
             assignee: 'gitstart'
           })

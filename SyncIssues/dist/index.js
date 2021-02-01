@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(831);
+/******/ 		return __webpack_require__(510);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -4640,6 +4640,75 @@ exports.FetchError = FetchError;
 
 /***/ }),
 
+/***/ 510:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(438);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+
+
+process.on('unhandledRejection', handleError);
+main().catch(handleError);
+async function main() {
+    const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('token', { required: true });
+    const owner = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('owner', { required: true });
+    const repo = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('repo', { required: true });
+    const github = Object(_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(token);
+    try {
+        const searchIssues = await github.search.issuesAndPullRequests({
+            q: `is:open is:issue mentions:gitstart archived:false repo:${owner}/${repo}`
+        });
+        const searchCurrentIssues = await github.issues.listForRepo({
+            owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
+            repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo
+        });
+        const issues = searchIssues.data.items;
+        const currentIssues = searchCurrentIssues.data;
+        await Promise.all(issues.map(async (issue) => {
+            const url = issue.url;
+            console.log('finding issue for: ', url);
+            const currentIssue = currentIssues.find(issue => issue.body.indexOf(url) !== -1);
+            const body = issue.body + '\n' + 'Duplicates and fixed by ' + issue.url;
+            if (currentIssue) {
+                console.log('found issue. updating: ', currentIssue.url);
+                await github.issues.update({
+                    owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
+                    repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
+                    issue_number: issue.number,
+                    body,
+                    assignee: 'gitstart'
+                });
+            }
+            else {
+                const newIssue = (await github.issues.create({
+                    owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
+                    repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
+                    body,
+                    title: issue.title
+                })).data;
+                console.log('created a new issue at: ', newIssue.url);
+            }
+        }));
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
+    }
+    catch (e) {
+        console.error(e);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(JSON.stringify(e));
+    }
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function handleError(err) {
+    console.error(err);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error: ${err}`);
+}
+
+
+/***/ }),
+
 /***/ 537:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -5258,64 +5327,6 @@ function removeHook(state, name, method) {
   }
 
   state.registry[name].splice(index, 1);
-}
-
-
-/***/ }),
-
-/***/ 831:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(438);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
-
-
-process.on('unhandledRejection', handleError);
-main().catch(handleError);
-async function main() {
-    const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('token', { required: true });
-    const branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('branch', { required: true });
-    const owner = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('owner', { required: true });
-    const repo = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('repo', { required: true });
-    const base = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('base', { required: true });
-    const github = Object(_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(token);
-    try {
-        const payload = await github.pulls.list({
-            owner: 'gitstart',
-            repo: repo,
-            head: `gitstart:${branch}`
-        });
-        console.log('payload', payload);
-        const pullRequest = await github.pulls.list({
-            owner: owner,
-            repo: repo,
-            head: `gitstart:${branch}`
-        });
-        console.log('pullRequest', pullRequest);
-        if (!pullRequest.data.length) {
-            await github.pulls.create({
-                owner: owner,
-                title: payload.data[0].title,
-                repo: repo,
-                head: `gitstart:${branch}`,
-                base: base
-            });
-        }
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
-    }
-    catch (e) {
-        console.error(e);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(JSON.stringify(e));
-    }
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleError(err) {
-    console.error(err);
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error: ${err}`);
 }
 
 

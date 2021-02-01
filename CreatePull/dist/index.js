@@ -2466,20 +2466,20 @@ async function main() {
     const github = Object(_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(token);
     try {
         const payload = await github.pulls.list({
-            owner: owner,
+            owner: 'gitstart',
             repo: repo,
             head: `gitstart:${branch}`
         });
         console.log('payload', payload);
         const pullRequest = await github.pulls.list({
-            owner: 'gitstart',
+            owner: owner,
             repo: repo,
             head: `gitstart:${branch}`
         });
         console.log('pullRequest', pullRequest);
         if (!pullRequest.data.length) {
             await github.pulls.create({
-                owner: 'GitStartHQ',
+                owner: owner,
                 title: payload.data[0].title,
                 repo: repo,
                 head: `gitstart:${branch}`,

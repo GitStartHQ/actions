@@ -8,7 +8,7 @@ main().catch(handleError)
 async function main(): Promise<void> {
   const token = core.getInput('token', {required: true})
   const upstream_owner = core.getInput('upstream_owner', {required: true})
-  const upstream_repo = core.getInput('repo', {required: true})
+  const upstream_repo = core.getInput('upstream_repo', {required: true})
 
   try {
     const object = {

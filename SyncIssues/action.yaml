@@ -1,13 +1,13 @@
 name: "Create Pull"
 description: "An action to create a pull create inside orignal Repo"
 inputs:
-  owner:
+  upstream_owner:
     description: Orignal ower of the repo.
     required: true
   token:
     description: Your Github Token
     required: true
-  repo:
+  upstream_repo:
     description: The name of your repo
     required: true
 runs:

@@ -1,0 +1,43 @@
+name: "GitSlicePull"
+description: "An action to pull changes into a git-sliced repo"
+inputs:
+  upstream_git_username:
+    description: Username of the Git User with access to upstream repo
+    required: true
+  upstream_git_password:
+    description: Password or OAuth Token of Git User with access to upstream repo
+    required: true
+  upstream_git_email:
+    description: Email of Git User with access to upstream repo
+    required: true
+  fork_default_branch:
+    description: Primary branch on the git-sliced repo for all pull requests
+  fork_github_token:
+    description: Github Access Token for git-sliced repo
+  upstream_github_token:
+    description: Github Access Token for upstream repo
+    required: true
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+      with:
+        token: ${{ inputs.fork_github_token }}
+        ref: ${{ inputs.fork_default_branch }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.20.0
+
+    - name: Install GitSlice and setup Bot
+      run: |
+        npm install -g https://github.com/GitStartHQ/git-slice.git
+        git config --global user.email ${{ inputs.upstream_git_email }}
+        git config --global user.name ${{ inputs.upstream_git_username }}
+    - name: Gitslice pull
+      run: |
+        git fetch -f
+        git reset --hard origin/${{ inputs.fork_default_branch }} && git pull origin ${{ inputs.fork_default_branch }} && git-slice pull --username ${{ inputs.upstream_git_username }} --password ${{ inputs.upstream_git_password }} && git push origin ${{ inputs.fork_default_branch }}

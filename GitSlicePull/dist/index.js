@@ -62,8 +62,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(545);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var fs_promises__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(865);
-/* harmony import */ var fs_promises__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs_promises__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(747);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
 
 
 
@@ -85,7 +85,7 @@ async function main() {
         required: true
     });
     try {
-        const gitSliceFile = await fs_promises__WEBPACK_IMPORTED_MODULE_3__.readFile('./git-slice.json');
+        const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
         const object = {
             slice_github_token,
             upstream_username,
@@ -12014,14 +12014,6 @@ module.exports = {
     'csbig5': 'big5hkscs',
     'xxbig5': 'big5hkscs',
 };
-
-
-/***/ }),
-
-/***/ 865:
-/***/ (function(module) {
-
-module.exports = eval("require")("fs/promises");
 
 
 /***/ }),

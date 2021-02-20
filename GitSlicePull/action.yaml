@@ -4,7 +4,7 @@ inputs:
   upstream_git_username:
     description: Username of the Git User with access to upstream repo
     required: true
- upstream_git_email:
+  upstream_git_email:
     description: Email of Git User with access to upstream repo
     required: true
   slice_default_branch:

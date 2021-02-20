@@ -17,7 +17,6 @@ inputs:
   upstream_github_token:
     description: Github Access Token for upstream repo
     required: true
-    required: true
 runs:
   using: "composite"
   steps:

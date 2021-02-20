@@ -13,7 +13,7 @@ async function main(): Promise<void> {
   const upstream_username = core.getInput('upstream_git_username', {
     required: true
   })
-  const upstream_password = core.getInput('upstream_git_password', {
+  const upstream_github_token = core.getInput('upstream_github_token', {
     required: true
   })
   const upstream_email = core.getInput('upstream_git_email', {required: true})
@@ -27,7 +27,7 @@ async function main(): Promise<void> {
       slice_github_token,
       upstream_username,
       upstream_email,
-      upstream_github_token: upstream_password,
+      upstream_github_token,
       slice_default_branch,
       slice_owner: context.repo.owner,
       slice_repo: context.repo.repo,

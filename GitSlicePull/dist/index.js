@@ -102,6 +102,10 @@ async function main() {
         git_slice_config: JSON.parse(gitSliceFile.toString())
     };
     const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/pull`, body);
+    if (resp.data && resp.data.error && !resp.data.success) {
+        console.error('got back error with pull: ', resp.data.error);
+        return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error with pull`);
+    }
     console.log('got back response from API: ', resp.data, resp.status, resp.statusText);
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
 }

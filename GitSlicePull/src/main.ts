@@ -67,6 +67,11 @@ async function main(): Promise<void> {
     body
   )
 
+  if (resp.data && resp.data.error && !resp.data.success) {
+    console.error('got back error with pull: ', resp.data.error)
+    return core.setFailed(`Unhandled error with pull`)
+  }
+
   console.log(
     'got back response from API: ',
     resp.data,

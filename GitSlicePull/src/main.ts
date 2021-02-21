@@ -6,52 +6,70 @@ import {promises as fs} from 'fs'
 process.on('unhandledRejection', handleError)
 main().catch(handleError)
 
+interface GitSliceConfig {
+  repoUrl: string
+  folders: Array<string>
+  branch: string
+  ignore: Array<string>
+}
+
+interface GitSlicePullRequestBody {
+  slice_github_token: string
+  slice_git_username: string
+  upstream_git_username: string
+  upstream_git_email: string
+  upstream_github_token: string
+  slice_default_branch: string
+  slice_owner: string
+  slice_repo: string
+
+  git_slice_config: GitSliceConfig
+}
+
 async function main(): Promise<void> {
   const slice_github_token = core.getInput('slice_github_token', {
     required: true
   })
-  const upstream_username = core.getInput('upstream_git_username', {
+  const upstream_git_username = core.getInput('upstream_git_username', {
     required: true
   })
   const upstream_github_token = core.getInput('upstream_github_token', {
     required: true
   })
-  const upstream_email = core.getInput('upstream_git_email', {required: true})
+  const upstream_git_email = core.getInput('upstream_git_email', {
+    required: true
+  })
   const slice_default_branch = core.getInput('slice_default_branch', {
     required: true
   })
 
-  try {
-    const gitSliceFile = await fs.readFile('./git-slice.json')
-    const object = {
-      slice_github_token,
-      upstream_username,
-      upstream_email,
-      upstream_github_token,
-      slice_default_branch,
-      slice_owner: context.repo.owner,
-      slice_repo: context.repo.repo,
-      ...JSON.parse(gitSliceFile.toString())
-    }
+  const gitSliceFile = await fs.readFile('./git-slice.json')
+  const body: GitSlicePullRequestBody = {
+    slice_github_token,
+    upstream_git_username,
+    upstream_git_email,
+    upstream_github_token,
+    slice_default_branch,
+    slice_git_username: upstream_git_username,
+    slice_owner: context.repo.owner,
+    slice_repo: context.repo.repo,
 
-    const queryString = new URLSearchParams(object).toString()
-
-    const resp = await axios.get(
-      `https://hooks.gitstart.dev/api/gitslice/pull?${queryString}`
-    )
-
-    console.log(
-      'got back response from API: ',
-      resp.data,
-      resp.status,
-      resp.statusText
-    )
-
-    core.setOutput('result', 'Success')
-  } catch (e) {
-    console.error(e)
-    core.error(JSON.stringify(e))
+    git_slice_config: JSON.parse(gitSliceFile.toString())
   }
+
+  const resp = await axios.post(
+    `https://hooks.gitstart.com/api/gitslice/pull`,
+    body
+  )
+
+  console.log(
+    'got back response from API: ',
+    resp.data,
+    resp.status,
+    resp.statusText
+  )
+
+  core.setOutput('result', 'Success')
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

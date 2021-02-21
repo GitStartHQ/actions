@@ -1,6 +1,9 @@
 name: "GitSlicePull"
 description: "An action to pull changes into a git-sliced repo"
 inputs:
+  slice_git_username:
+    description: Username of the Git User with access to sliced repo
+    required: true
   upstream_git_username:
     description: Username of the Git User with access to upstream repo
     required: true

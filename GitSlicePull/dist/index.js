@@ -74,37 +74,33 @@ async function main() {
     const slice_github_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_github_token', {
         required: true
     });
-    const upstream_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
+    const upstream_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
         required: true
     });
     const upstream_github_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_github_token', {
         required: true
     });
-    const upstream_email = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_email', { required: true });
+    const upstream_git_email = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_email', {
+        required: true
+    });
     const slice_default_branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_default_branch', {
         required: true
     });
-    try {
-        const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
-        const object = {
-            slice_github_token,
-            upstream_username,
-            upstream_email,
-            upstream_github_token,
-            slice_default_branch,
-            slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
-            slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
-            ...JSON.parse(gitSliceFile.toString())
-        };
-        const queryString = new URLSearchParams(object).toString();
-        const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().get(`https://hooks.gitstart.dev/api/gitslice/pull?${queryString}`);
-        console.log('got back response from API: ', resp.data, resp.status, resp.statusText);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
-    }
-    catch (e) {
-        console.error(e);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(JSON.stringify(e));
-    }
+    const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
+    const body = {
+        slice_github_token,
+        upstream_git_username,
+        upstream_git_email,
+        upstream_github_token,
+        slice_default_branch,
+        slice_git_username: upstream_git_username,
+        slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
+        slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
+        git_slice_config: JSON.parse(gitSliceFile.toString())
+    };
+    const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/pull`, body);
+    console.log('got back response from API: ', resp.data, resp.status, resp.statusText);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleError(err) {

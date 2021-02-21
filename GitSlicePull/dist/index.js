@@ -77,6 +77,9 @@ async function main() {
     const upstream_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
         required: true
     });
+    const slice_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_username', {
+        required: true
+    });
     const upstream_github_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_github_token', {
         required: true
     });
@@ -93,7 +96,7 @@ async function main() {
         upstream_git_email,
         upstream_github_token,
         slice_default_branch,
-        slice_git_username: upstream_git_username,
+        slice_git_username,
         slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
         git_slice_config: JSON.parse(gitSliceFile.toString())

@@ -1,0 +1,28 @@
+name: Amazon ECR Action
+author: gitstart
+description: An action to allow operations on Amazon ECR. Supported actions for now are pull and push
+inputs:
+  access-key-id:
+    description: Access key for IAM User.
+    required: true
+  secret-access-key:
+    description: Secret access key for IAM User.
+    required: true
+  image:
+    description: The name of the image on ECR.
+    required: true
+  region:
+    description: AWS Region to use.  Defaults to us-west-2.
+    required: false
+  type:
+    description: Defines action type to perform. E.G pull, push, etc
+    required: false
+  repository:
+    description: Name of ECR repository
+    required: true
+runs:
+  using: node12
+  main: 'main.js'
+branding:
+  icon: upload
+  color: purple

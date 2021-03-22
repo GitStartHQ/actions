@@ -9,6 +9,7 @@
   "scripts": {
     "build:create-pull": "ncc build CreatePull/src/main.ts -o CreatePull/dist",
     "build:sync-issues": "ncc build SyncIssues/src/main.ts -o SyncIssues/dist",
+    "build:ecr": "ncc build ecr/src/main.ts -o ecr/dist",
     "build": "npm run build:create-pull && npm run build:sync-issues",
     "format:check": "prettier --check **/*.ts",
     "format:write": "prettier --write **/*.ts",

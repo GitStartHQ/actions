@@ -2,7 +2,7 @@ name: "Create Pull"
 description: "An action to create a pull create inside orignal Repo"
 inputs:
   upstream_owner:
-    description: Orignal ower of the repo.
+    description: Original owner of the repo.
     required: true
   forked_branch:
     description: Your branch which you are going to create a PR against.

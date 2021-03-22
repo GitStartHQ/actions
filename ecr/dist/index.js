@@ -492,10 +492,13 @@ async function main() {
             image,
             awsRegion,
             awsAccountId,
-            ecrRepository,
+            ecrRepository
         });
     }
-    catch (error) { }
+    catch (e) {
+        console.error(e);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(JSON.stringify(e));
+    }
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleError(err) {

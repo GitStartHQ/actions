@@ -51,6 +51,9 @@ async function main(): Promise<void> {
   const slice_default_branch = core.getInput('slice_default_branch', {
     required: true
   })
+  const slice_branch_to_push = core.getInput('slice_branch_to_push', {
+    required: true
+  })
   const custom_commit_message = core.getInput('custom_commit_message', {
     required: true
   })
@@ -69,7 +72,7 @@ async function main(): Promise<void> {
     upstream_git_token,
     slice_default_branch,
     slice_git_username,
-    slice_branch_to_push: context.ref.replace('refs/heads/', ''),
+    slice_branch_to_push,
     custom_commit_message,
     overide_previous_push: overide_previous_push === 'true',
     pull_number: Number(pull_number),

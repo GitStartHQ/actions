@@ -22,6 +22,9 @@ inputs:
   custom_commit_message:
     description: Git commit message for the upstream repo
     required: true 
+  slice_branch_to_push:
+    description: Git branch that should be pushed to the client
+    requires: true  
   pull_number: 
     description: Pull request number which needs to be pushed
     required: true

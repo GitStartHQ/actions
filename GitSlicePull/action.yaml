@@ -6,7 +6,7 @@ inputs:
     required: true
   upstream_git_username:
     description: Username of the Git User with access to upstream repo
-    required: true
+    required: false
   upstream_git_email:
     description: Email of Git User with access to upstream repo
     required: true
@@ -14,9 +14,9 @@ inputs:
     description: Primary branch on the git-sliced repo for all pull requests
   slice_github_token:
     description: Github Access Token for git-sliced repo
-  upstream_github_token:
+  upstream_git_token:
     description: Github Access Token for upstream repo
-    required: true
+    required: false
 runs:
   using: node12
   main: dist/index.js

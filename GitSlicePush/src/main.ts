@@ -84,7 +84,7 @@ async function main(): Promise<void> {
   }
 
   const resp = await axios.post(
-    `https://hooks.gitstart.com/api/gitslice/push`,
+    `https://bc91612552c8.ngrok.io/api/gitslice/push`,
     body
   )
 

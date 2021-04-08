@@ -99,20 +99,21 @@ async function main(): Promise<void> {
 
   // Shows response as it comes in ...
   const stream = resp.data
-  stream.on('data', (chunk: any) => {
-    console.log(ab2str(chunk))
-  })
-
   await new Promise((res, rej) => {
+    stream.on('data', (chunk: any) => {
+      const str = ab2str(chunk)
+      if (
+        str.includes('error') ||
+        str.includes('Error') ||
+        str.includes('ERROR')
+      ) {
+        rej(str)
+      } else {
+        console.log(str)
+      }
+    })
     stream.on('end', res)
   })
-
-  // console.log(
-  //   'got back response from API: ',
-  //   resp.data,
-  //   resp.status,
-  //   resp.statusText
-  // )
 
   core.setOutput('result', 'Success')
 }

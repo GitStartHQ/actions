@@ -8924,18 +8924,20 @@ async function main() {
     }
     // Shows response as it comes in ...
     const stream = resp.data;
-    stream.on('data', (chunk) => {
-        console.log(ab2str(chunk));
-    });
     await new Promise((res, rej) => {
+        stream.on('data', (chunk) => {
+            const str = ab2str(chunk);
+            if (str.includes('error') ||
+                str.includes('Error') ||
+                str.includes('ERROR')) {
+                rej(str);
+            }
+            else {
+                console.log(str);
+            }
+        });
         stream.on('end', res);
     });
-    // console.log(
-    //   'got back response from API: ',
-    //   resp.data,
-    //   resp.status,
-    //   resp.statusText
-    // )
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

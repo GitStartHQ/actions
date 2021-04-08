@@ -8916,13 +8916,22 @@ async function main() {
     };
     const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://dacf08cf7c55.ngrok.io/api/gitslice/push`, body, {
         responseType: 'stream'
+        // adapter: httpAdapter
     });
     if (resp.data && resp.data.error && !resp.data.success) {
         console.error('got back error with pull: ', resp.data.error);
         return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error with pull`);
     }
     // Shows response as it comes in ...
-    resp.data.pipe(console.log);
+    const stream = resp.data;
+    stream.on('data', (chunk) => {
+        console.log(`Rec data`, chunk);
+        const buf = Buffer.from(chunk);
+        console.log(buf);
+    });
+    await new Promise((res, rej) => {
+        stream.on('end', res);
+    });
     // console.log(
     //   'got back response from API: ',
     //   resp.data,

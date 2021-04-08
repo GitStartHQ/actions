@@ -88,6 +88,7 @@ async function main(): Promise<void> {
     body,
     {
       responseType: 'stream'
+      // adapter: httpAdapter
     }
   )
 
@@ -97,7 +98,16 @@ async function main(): Promise<void> {
   }
 
   // Shows response as it comes in ...
-  resp.data.pipe(console.log)
+  const stream = resp.data
+  stream.on('data', (chunk: any) => {
+    console.log(`Rec data`, chunk)
+    const buf = Buffer.from(chunk)
+    console.log(buf)
+  })
+
+  await new Promise((res, rej) => {
+    stream.on('end', res)
+  })
 
   // console.log(
   //   'got back response from API: ',

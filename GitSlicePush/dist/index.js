@@ -8925,9 +8925,7 @@ async function main() {
     // Shows response as it comes in ...
     const stream = resp.data;
     stream.on('data', (chunk) => {
-        console.log(`Rec data`, chunk);
-        const buf = Buffer.from(chunk);
-        console.log(buf);
+        console.log(ab2str(chunk));
     });
     await new Promise((res, rej) => {
         stream.on('end', res);
@@ -8944,6 +8942,9 @@ async function main() {
 function handleError(err) {
     console.error(err);
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error: ${err}`);
+}
+function ab2str(buf) {
+    return String.fromCharCode.apply(null, buf);
 }
 
 

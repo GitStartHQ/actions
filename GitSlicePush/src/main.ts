@@ -100,9 +100,7 @@ async function main(): Promise<void> {
   // Shows response as it comes in ...
   const stream = resp.data
   stream.on('data', (chunk: any) => {
-    console.log(`Rec data`, chunk)
-    const buf = Buffer.from(chunk)
-    console.log(buf)
+    console.log(ab2str(chunk))
   })
 
   await new Promise((res, rej) => {
@@ -123,4 +121,8 @@ async function main(): Promise<void> {
 function handleError(err: any): void {
   console.error(err)
   core.setFailed(`Unhandled error: ${err}`)
+}
+
+function ab2str(buf: any) {
+  return String.fromCharCode.apply(null, buf)
 }

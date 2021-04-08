@@ -8892,7 +8892,7 @@ async function main() {
     const custom_commit_message = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('custom_commit_message', {
         required: true
     });
-    const push_pull_request = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('push_pull_request', {
+    const push_pr = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('push_pr', {
         required: false
     });
     const overide_previous_push = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('overide_previous_push', {
@@ -8909,7 +8909,7 @@ async function main() {
         slice_branch_to_push,
         custom_commit_message,
         overide_previous_push: overide_previous_push === 'true',
-        push_pull_request: push_pull_request === 'true',
+        push_pr: push_pr === 'true',
         slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
         git_slice_config: JSON.parse(gitSliceFile.toString())

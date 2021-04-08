@@ -25,7 +25,7 @@ inputs:
   slice_branch_to_push:
     description: Git branch that should be pushed to the client
     requires: true  
-  push_pull_request: 
+  push_pr: 
     description: Should pull request be created on the client side
     required: false
   overide_previous_push:

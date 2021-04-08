@@ -22,7 +22,7 @@ export interface GitSlicePushRequestBody {
   slice_default_branch: string
   slice_branch_to_push: string
   custom_commit_message: string
-  push_pull_request?: boolean
+  push_pr?: boolean
   overide_previous_push?: boolean
 
   slice_owner: string
@@ -57,7 +57,7 @@ async function main(): Promise<void> {
   const custom_commit_message = core.getInput('custom_commit_message', {
     required: true
   })
-  const push_pull_request = core.getInput('push_pull_request', {
+  const push_pr = core.getInput('push_pr', {
     required: false
   })
   const overide_previous_push = core.getInput('overide_previous_push', {
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
     slice_branch_to_push,
     custom_commit_message,
     overide_previous_push: overide_previous_push === 'true',
-    push_pull_request: push_pull_request === 'true',
+    push_pr: push_pr === 'true',
 
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,

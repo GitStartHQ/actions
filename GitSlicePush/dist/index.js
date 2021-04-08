@@ -8916,7 +8916,6 @@ async function main() {
     };
     const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://dacf08cf7c55.ngrok.io/api/gitslice/push`, body, {
         responseType: 'stream'
-        // adapter: httpAdapter
     });
     if (resp.data && resp.data.error && !resp.data.success) {
         console.error('got back error with push: ', resp.data.error);

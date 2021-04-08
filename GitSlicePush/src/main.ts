@@ -88,7 +88,6 @@ async function main(): Promise<void> {
     body,
     {
       responseType: 'stream'
-      // adapter: httpAdapter
     }
   )
 

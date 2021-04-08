@@ -64,7 +64,10 @@ async function main(): Promise<void> {
 
   const resp = await axios.post(
     `https://dacf08cf7c55.ngrok.io/api/gitslice/pull`,
-    body
+    body,
+    {
+      responseType: 'stream'
+    }
   )
 
   if (resp.data && resp.data.error && !resp.data.success) {

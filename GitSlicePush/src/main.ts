@@ -84,8 +84,11 @@ async function main(): Promise<void> {
   }
 
   const resp = await axios.post(
-    `https://bc91612552c8.ngrok.io/api/gitslice/push`,
-    body
+    `https://dacf08cf7c55.ngrok.io/api/gitslice/push`,
+    body,
+    {
+      responseType: 'stream'
+    }
   )
 
   if (resp.data && resp.data.error && !resp.data.success) {
@@ -93,12 +96,15 @@ async function main(): Promise<void> {
     return core.setFailed(`Unhandled error with pull`)
   }
 
-  console.log(
-    'got back response from API: ',
-    resp.data,
-    resp.status,
-    resp.statusText
-  )
+  // Shows response as it comes in ...
+  resp.data.pipe(console.log)
+
+  // console.log(
+  //   'got back response from API: ',
+  //   resp.data,
+  //   resp.status,
+  //   resp.statusText
+  // )
 
   core.setOutput('result', 'Success')
 }

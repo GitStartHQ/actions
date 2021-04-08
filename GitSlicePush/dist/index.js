@@ -8914,12 +8914,21 @@ async function main() {
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
         git_slice_config: JSON.parse(gitSliceFile.toString())
     };
-    const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://bc91612552c8.ngrok.io/api/gitslice/push`, body);
+    const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://dacf08cf7c55.ngrok.io/api/gitslice/push`, body, {
+        responseType: 'stream'
+    });
     if (resp.data && resp.data.error && !resp.data.success) {
         console.error('got back error with pull: ', resp.data.error);
         return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error with pull`);
     }
-    console.log('got back response from API: ', resp.data, resp.status, resp.statusText);
+    // Shows response as it comes in ...
+    resp.data.pipe(console.log);
+    // console.log(
+    //   'got back response from API: ',
+    //   resp.data,
+    //   resp.status,
+    //   resp.statusText
+    // )
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -101,7 +101,7 @@ async function main() {
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
         git_slice_config: JSON.parse(gitSliceFile.toString())
     };
-    const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/pull`, body);
+    const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://dacf08cf7c55.ngrok.io/api/gitslice/pull`, body);
     if (resp.data && resp.data.error && !resp.data.success) {
         console.error('got back error with pull: ', resp.data.error);
         return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error with pull`);

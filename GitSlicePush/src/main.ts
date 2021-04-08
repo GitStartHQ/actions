@@ -84,7 +84,7 @@ async function main(): Promise<void> {
   }
 
   const resp = await axios.post(
-    `https://dacf08cf7c55.ngrok.io/api/gitslice/push`,
+    `https://hooks.gitstart.com/api/gitslice/push`,
     body,
     {
       responseType: 'stream'

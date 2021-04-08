@@ -71,7 +71,7 @@ __webpack_require__.r(__webpack_exports__);
 process.on('unhandledRejection', handleError);
 main().catch(handleError);
 async function main() {
-    const slice_github_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_github_token', {
+    const slice_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_token', {
         required: true
     });
     const upstream_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
@@ -91,7 +91,7 @@ async function main() {
     });
     const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     const body = {
-        slice_github_token,
+        slice_git_token,
         upstream_git_username,
         upstream_git_email,
         upstream_git_token,

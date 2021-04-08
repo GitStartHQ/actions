@@ -14,8 +14,8 @@ interface GitSliceConfig {
 }
 
 interface GitSlicePullRequestBody {
-  slice_github_token: string
-  slice_git_username: string
+  slice_git_token?: string
+  slice_git_username?: string
   upstream_git_username?: string
   upstream_git_email: string
   upstream_git_token?: string
@@ -27,7 +27,7 @@ interface GitSlicePullRequestBody {
 }
 
 async function main(): Promise<void> {
-  const slice_github_token = core.getInput('slice_github_token', {
+  const slice_git_token = core.getInput('slice_git_token', {
     required: true
   })
   const upstream_git_username = core.getInput('upstream_git_username', {
@@ -49,7 +49,7 @@ async function main(): Promise<void> {
 
   const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePullRequestBody = {
-    slice_github_token,
+    slice_git_token,
     upstream_git_username,
     upstream_git_email,
     upstream_git_token,

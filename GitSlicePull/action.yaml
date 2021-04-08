@@ -3,7 +3,7 @@ description: "An action to pull changes into a git-sliced repo"
 inputs:
   slice_git_username:
     description: Username of the Git User with access to sliced repo
-    required: true
+    required: false
   upstream_git_username:
     description: Username of the Git User with access to upstream repo
     required: false
@@ -12,8 +12,10 @@ inputs:
     required: true
   slice_default_branch:
     description: Primary branch on the git-sliced repo for all pull requests
-  slice_github_token:
+    required: true
+  slice_git_token:
     description: Github Access Token for git-sliced repo
+    required: false
   upstream_git_token:
     description: Github Access Token for upstream repo
     required: false

@@ -32,7 +32,7 @@ export interface GitSlicePushRequestBody {
 }
 
 async function main(): Promise<void> {
-  const slice_git_token = core.getInput('slice_github_token', {
+  const slice_git_token = core.getInput('slice_git_token', {
     required: false
   })
   const upstream_git_username = core.getInput('upstream_git_username', {

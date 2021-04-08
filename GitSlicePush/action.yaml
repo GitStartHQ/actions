@@ -3,7 +3,7 @@ description: "An action to pull changes into a git-sliced repo"
 inputs:
   slice_git_username:
     description: Username of the git user with access to sliced repo
-    required: true
+    required: false
   upstream_git_username:
     description: Username of the git user with access to upstream repo
     required: false
@@ -13,9 +13,9 @@ inputs:
   slice_default_branch:
     description: Primary branch on the git-sliced repo for all pull requests
     required: true
-  slice_github_token:
+  slice_git_token:
     description: Github access token for git-sliced repo
-    required: true
+    required: false
   upstream_git_token:
     description: Git access token for upstream repo
     required: false
@@ -25,9 +25,9 @@ inputs:
   slice_branch_to_push:
     description: Git branch that should be pushed to the client
     requires: true  
-  pull_number: 
-    description: Pull request number which needs to be pushed
-    required: true
+  push_pull_request: 
+    description: Should pull request be created on the client side
+    required: false
   overide_previous_push:
     description: Overides previous push (force push) if set to true
     required: false  

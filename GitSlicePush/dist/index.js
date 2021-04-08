@@ -8868,14 +8868,14 @@ __webpack_require__.r(__webpack_exports__);
 process.on('unhandledRejection', handleError);
 main().catch(handleError);
 async function main() {
-    const slice_github_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_github_token', {
-        required: true
+    const slice_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_github_token', {
+        required: false
     });
     const upstream_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
         required: false
     });
     const slice_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_username', {
-        required: true
+        required: false
     });
     const upstream_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_token', {
         required: false
@@ -8892,15 +8892,15 @@ async function main() {
     const custom_commit_message = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('custom_commit_message', {
         required: true
     });
-    const pull_number = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pull_number', {
-        required: true
+    const push_pull_request = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('push_pull_request', {
+        required: false
     });
     const overide_previous_push = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('overide_previous_push', {
         required: false
     });
     const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     const body = {
-        slice_github_token,
+        slice_git_token,
         upstream_git_username,
         upstream_git_email,
         upstream_git_token,
@@ -8909,7 +8909,7 @@ async function main() {
         slice_branch_to_push,
         custom_commit_message,
         overide_previous_push: overide_previous_push === 'true',
-        pull_number: Number(pull_number),
+        push_pull_request: push_pull_request === 'true',
         slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
         git_slice_config: JSON.parse(gitSliceFile.toString())

@@ -14,15 +14,15 @@ interface GitSliceConfig {
 }
 
 export interface GitSlicePushRequestBody {
-  slice_github_token: string
-  slice_git_username: string
+  slice_git_token?: string
+  slice_git_username?: string
   upstream_git_username?: string
   upstream_git_email: string
   upstream_git_token?: string
   slice_default_branch: string
   slice_branch_to_push: string
   custom_commit_message: string
-  pull_number?: number
+  push_pull_request?: boolean
   overide_previous_push?: boolean
 
   slice_owner: string
@@ -32,15 +32,15 @@ export interface GitSlicePushRequestBody {
 }
 
 async function main(): Promise<void> {
-  const slice_github_token = core.getInput('slice_github_token', {
-    required: true
+  const slice_git_token = core.getInput('slice_github_token', {
+    required: false
   })
   const upstream_git_username = core.getInput('upstream_git_username', {
     required: false
   })
 
   const slice_git_username = core.getInput('slice_git_username', {
-    required: true
+    required: false
   })
   const upstream_git_token = core.getInput('upstream_git_token', {
     required: false
@@ -57,8 +57,8 @@ async function main(): Promise<void> {
   const custom_commit_message = core.getInput('custom_commit_message', {
     required: true
   })
-  const pull_number = core.getInput('pull_number', {
-    required: true
+  const push_pull_request = core.getInput('push_pull_request', {
+    required: false
   })
   const overide_previous_push = core.getInput('overide_previous_push', {
     required: false
@@ -66,7 +66,7 @@ async function main(): Promise<void> {
 
   const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePushRequestBody = {
-    slice_github_token,
+    slice_git_token,
     upstream_git_username,
     upstream_git_email,
     upstream_git_token,
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
     slice_branch_to_push,
     custom_commit_message,
     overide_previous_push: overide_previous_push === 'true',
-    pull_number: Number(pull_number),
+    push_pull_request: push_pull_request === 'true',
 
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,

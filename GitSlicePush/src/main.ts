@@ -93,8 +93,8 @@ async function main(): Promise<void> {
   )
 
   if (resp.data && resp.data.error && !resp.data.success) {
-    console.error('got back error with pull: ', resp.data.error)
-    return core.setFailed(`Unhandled error with pull`)
+    console.error('got back error with push: ', resp.data.error)
+    return core.setFailed(`Unhandled error with push`)
   }
 
   // Shows response as it comes in ...
@@ -102,11 +102,7 @@ async function main(): Promise<void> {
   await new Promise((res, rej) => {
     stream.on('data', (chunk: any) => {
       const str = ab2str(chunk)
-      if (
-        str.includes('error') ||
-        str.includes('Error') ||
-        str.includes('ERROR')
-      ) {
+      if (isError(str)) {
         rej(str)
       } else {
         console.log(str)
@@ -122,6 +118,10 @@ async function main(): Promise<void> {
 function handleError(err: any): void {
   console.error(err)
   core.setFailed(`Unhandled error: ${err}`)
+}
+
+function isError(str: string) {
+  return str.toLowerCase().includes('error')
 }
 
 function ab2str(buf: any) {

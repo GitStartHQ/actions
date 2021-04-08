@@ -106,8 +106,27 @@ async function main() {
         console.error('got back error with pull: ', resp.data.error);
         return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error with pull`);
     }
-    console.log('got back response from API: ', resp.data, resp.status, resp.statusText);
+    // Shows response as it comes in ...
+    const stream = resp.data;
+    await new Promise((res, rej) => {
+        stream.on('data', (chunk) => {
+            const str = ab2str(chunk);
+            if (isError(str)) {
+                rej(str);
+            }
+            else {
+                console.log(str);
+            }
+        });
+        stream.on('end', res);
+    });
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
+}
+function isError(str) {
+    return str.toLowerCase().includes('error');
+}
+function ab2str(buf) {
+    return String.fromCharCode.apply(null, buf);
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleError(err) {

@@ -72,14 +72,29 @@ async function main(): Promise<void> {
     return core.setFailed(`Unhandled error with pull`)
   }
 
-  console.log(
-    'got back response from API: ',
-    resp.data,
-    resp.status,
-    resp.statusText
-  )
+  // Shows response as it comes in ...
+  const stream = resp.data
+  await new Promise((res, rej) => {
+    stream.on('data', (chunk: any) => {
+      const str = ab2str(chunk)
+      if (isError(str)) {
+        rej(str)
+      } else {
+        console.log(str)
+      }
+    })
+    stream.on('end', res)
+  })
 
   core.setOutput('result', 'Success')
+}
+
+function isError(str: string) {
+  return str.toLowerCase().includes('error')
+}
+
+function ab2str(buf: any) {
+  return String.fromCharCode.apply(null, buf)
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -8919,17 +8919,15 @@ async function main() {
         // adapter: httpAdapter
     });
     if (resp.data && resp.data.error && !resp.data.success) {
-        console.error('got back error with pull: ', resp.data.error);
-        return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error with pull`);
+        console.error('got back error with push: ', resp.data.error);
+        return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error with push`);
     }
     // Shows response as it comes in ...
     const stream = resp.data;
     await new Promise((res, rej) => {
         stream.on('data', (chunk) => {
             const str = ab2str(chunk);
-            if (str.includes('error') ||
-                str.includes('Error') ||
-                str.includes('ERROR')) {
+            if (isError(str)) {
                 rej(str);
             }
             else {
@@ -8944,6 +8942,9 @@ async function main() {
 function handleError(err) {
     console.error(err);
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error: ${err}`);
+}
+function isError(str) {
+    return str.toLowerCase().includes('error');
 }
 function ab2str(buf) {
     return String.fromCharCode.apply(null, buf);

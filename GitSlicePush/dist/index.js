@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(831);
+/******/ 		return __webpack_require__(886);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -1281,101 +1281,6 @@ exports.restEndpointMethods = restEndpointMethods;
 
 /***/ }),
 
-/***/ 48:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(328);
-
-/**
- * Config-specific merge-function which creates a new config-object
- * by merging two configuration objects together.
- *
- * @param {Object} config1
- * @param {Object} config2
- * @returns {Object} New object resulting from merging config2 to config1
- */
-module.exports = function mergeConfig(config1, config2) {
-  // eslint-disable-next-line no-param-reassign
-  config2 = config2 || {};
-  var config = {};
-
-  var valueFromConfig2Keys = ['url', 'method', 'data'];
-  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy', 'params'];
-  var defaultToConfig2Keys = [
-    'baseURL', 'transformRequest', 'transformResponse', 'paramsSerializer',
-    'timeout', 'timeoutMessage', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
-    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress', 'decompress',
-    'maxContentLength', 'maxBodyLength', 'maxRedirects', 'transport', 'httpAgent',
-    'httpsAgent', 'cancelToken', 'socketPath', 'responseEncoding'
-  ];
-  var directMergeKeys = ['validateStatus'];
-
-  function getMergedValue(target, source) {
-    if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
-      return utils.merge(target, source);
-    } else if (utils.isPlainObject(source)) {
-      return utils.merge({}, source);
-    } else if (utils.isArray(source)) {
-      return source.slice();
-    }
-    return source;
-  }
-
-  function mergeDeepProperties(prop) {
-    if (!utils.isUndefined(config2[prop])) {
-      config[prop] = getMergedValue(config1[prop], config2[prop]);
-    } else if (!utils.isUndefined(config1[prop])) {
-      config[prop] = getMergedValue(undefined, config1[prop]);
-    }
-  }
-
-  utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
-    if (!utils.isUndefined(config2[prop])) {
-      config[prop] = getMergedValue(undefined, config2[prop]);
-    }
-  });
-
-  utils.forEach(mergeDeepPropertiesKeys, mergeDeepProperties);
-
-  utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
-    if (!utils.isUndefined(config2[prop])) {
-      config[prop] = getMergedValue(undefined, config2[prop]);
-    } else if (!utils.isUndefined(config1[prop])) {
-      config[prop] = getMergedValue(undefined, config1[prop]);
-    }
-  });
-
-  utils.forEach(directMergeKeys, function merge(prop) {
-    if (prop in config2) {
-      config[prop] = getMergedValue(config1[prop], config2[prop]);
-    } else if (prop in config1) {
-      config[prop] = getMergedValue(undefined, config1[prop]);
-    }
-  });
-
-  var axiosKeys = valueFromConfig2Keys
-    .concat(mergeDeepPropertiesKeys)
-    .concat(defaultToConfig2Keys)
-    .concat(directMergeKeys);
-
-  var otherKeys = Object
-    .keys(config1)
-    .concat(Object.keys(config2))
-    .filter(function filterAxiosKeys(key) {
-      return axiosKeys.indexOf(key) === -1;
-    });
-
-  utils.forEach(otherKeys, mergeDeepProperties);
-
-  return config;
-};
-
-
-/***/ }),
-
 /***/ 53:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -2002,7 +1907,7 @@ var utils = __webpack_require__(328);
 var buildURL = __webpack_require__(646);
 var InterceptorManager = __webpack_require__(214);
 var dispatchRequest = __webpack_require__(62);
-var mergeConfig = __webpack_require__(48);
+var mergeConfig = __webpack_require__(831);
 
 /**
  * Create a new instance of Axios
@@ -7564,7 +7469,7 @@ module.exports = require("events");
 var utils = __webpack_require__(328);
 var bind = __webpack_require__(65);
 var Axios = __webpack_require__(178);
-var mergeConfig = __webpack_require__(48);
+var mergeConfig = __webpack_require__(831);
 var defaults = __webpack_require__(190);
 
 /**
@@ -8765,51 +8670,96 @@ function removeHook(state, name, method) {
 /***/ }),
 
 /***/ 831:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(438);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(545);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 
 
+var utils = __webpack_require__(328);
 
-process.on('unhandledRejection', handleError);
-main().catch(handleError);
-async function main() {
-    const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('token', { required: true });
-    const upstream_owner = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_owner', { required: true });
-    const upstream_repo = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_repo', { required: true });
-    const upstream_branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_branch', { required: true });
-    const forked_branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('forked_branch', { required: true });
-    try {
-        const object = {
-            token,
-            upstream_owner,
-            upstream_repo,
-            forked_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
-            upstream_branch,
-            forked_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
-            forked_branch
-        };
-        const queryString = new URLSearchParams(object).toString();
-        await axios__WEBPACK_IMPORTED_MODULE_2___default().get(`https://hooks.gitstart.dev/api/github/actions/open_source/sync_pull_requests?${queryString}`);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
+/**
+ * Config-specific merge-function which creates a new config-object
+ * by merging two configuration objects together.
+ *
+ * @param {Object} config1
+ * @param {Object} config2
+ * @returns {Object} New object resulting from merging config2 to config1
+ */
+module.exports = function mergeConfig(config1, config2) {
+  // eslint-disable-next-line no-param-reassign
+  config2 = config2 || {};
+  var config = {};
+
+  var valueFromConfig2Keys = ['url', 'method', 'data'];
+  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy', 'params'];
+  var defaultToConfig2Keys = [
+    'baseURL', 'transformRequest', 'transformResponse', 'paramsSerializer',
+    'timeout', 'timeoutMessage', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
+    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress', 'decompress',
+    'maxContentLength', 'maxBodyLength', 'maxRedirects', 'transport', 'httpAgent',
+    'httpsAgent', 'cancelToken', 'socketPath', 'responseEncoding'
+  ];
+  var directMergeKeys = ['validateStatus'];
+
+  function getMergedValue(target, source) {
+    if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
+      return utils.merge(target, source);
+    } else if (utils.isPlainObject(source)) {
+      return utils.merge({}, source);
+    } else if (utils.isArray(source)) {
+      return source.slice();
     }
-    catch (e) {
-        console.error(e);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.error(JSON.stringify(e));
+    return source;
+  }
+
+  function mergeDeepProperties(prop) {
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(config1[prop], config2[prop]);
+    } else if (!utils.isUndefined(config1[prop])) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
     }
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleError(err) {
-    console.error(err);
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error: ${err}`);
-}
+  }
+
+  utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(undefined, config2[prop]);
+    }
+  });
+
+  utils.forEach(mergeDeepPropertiesKeys, mergeDeepProperties);
+
+  utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(undefined, config2[prop]);
+    } else if (!utils.isUndefined(config1[prop])) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  });
+
+  utils.forEach(directMergeKeys, function merge(prop) {
+    if (prop in config2) {
+      config[prop] = getMergedValue(config1[prop], config2[prop]);
+    } else if (prop in config1) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  });
+
+  var axiosKeys = valueFromConfig2Keys
+    .concat(mergeDeepPropertiesKeys)
+    .concat(defaultToConfig2Keys)
+    .concat(directMergeKeys);
+
+  var otherKeys = Object
+    .keys(config1)
+    .concat(Object.keys(config2))
+    .filter(function filterAxiosKeys(key) {
+      return axiosKeys.indexOf(key) === -1;
+    });
+
+  utils.forEach(otherKeys, mergeDeepProperties);
+
+  return config;
+};
 
 
 /***/ }),
@@ -8894,6 +8844,110 @@ module.exports = Cancel;
 /***/ (function(module) {
 
 module.exports = eval("require")("encoding");
+
+
+/***/ }),
+
+/***/ 886:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(438);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(545);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(747);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+process.on('unhandledRejection', handleError);
+main().catch(handleError);
+async function main() {
+    const slice_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_token', {
+        required: false
+    });
+    const upstream_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
+        required: false
+    });
+    const slice_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_username', {
+        required: false
+    });
+    const upstream_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_token', {
+        required: false
+    });
+    const upstream_git_email = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_email', {
+        required: true
+    });
+    const slice_default_branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_default_branch', {
+        required: true
+    });
+    const slice_branch_to_push = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_branch_to_push', {
+        required: true
+    });
+    const custom_commit_message = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('custom_commit_message', {
+        required: true
+    });
+    const push_pr = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('push_pr', {
+        required: false
+    });
+    const overide_previous_push = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('overide_previous_push', {
+        required: false
+    });
+    const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
+    const body = {
+        slice_git_token,
+        upstream_git_username,
+        upstream_git_email,
+        upstream_git_token,
+        slice_default_branch,
+        slice_git_username,
+        slice_branch_to_push,
+        custom_commit_message,
+        overide_previous_push: overide_previous_push === 'true',
+        push_pr: push_pr === 'true',
+        slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
+        slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
+        git_slice_config: JSON.parse(gitSliceFile.toString())
+    };
+    const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/push`, body, {
+        responseType: 'stream'
+    });
+    if (resp.data && resp.data.error && !resp.data.success) {
+        console.error('got back error with push: ', resp.data.error);
+        return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error with push`);
+    }
+    // Shows response as it comes in ...
+    const stream = resp.data;
+    await new Promise((res, rej) => {
+        stream.on('data', (chunk) => {
+            const str = ab2str(chunk);
+            if (isError(str)) {
+                rej(str);
+            }
+            else {
+                console.log(str);
+            }
+        });
+        stream.on('end', res);
+    });
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function handleError(err) {
+    console.error(err);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error: ${err}`);
+}
+function isError(str) {
+    return str.toLowerCase().includes('error');
+}
+function ab2str(buf) {
+    return String.fromCharCode.apply(null, buf);
+}
 
 
 /***/ }),

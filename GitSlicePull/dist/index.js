@@ -72,7 +72,7 @@ process.on('unhandledRejection', handleError);
 main().catch(handleError);
 async function main() {
     const slice_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_token', {
-        required: true
+        required: false
     });
     const upstream_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
         required: false

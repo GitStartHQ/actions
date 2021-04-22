@@ -78,7 +78,7 @@ async function main() {
         required: false
     });
     const slice_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_username', {
-        required: true
+        required: false
     });
     const upstream_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_token', {
         required: false

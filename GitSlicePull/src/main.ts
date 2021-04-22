@@ -35,7 +35,7 @@ async function main(): Promise<void> {
   })
 
   const slice_git_username = core.getInput('slice_git_username', {
-    required: true
+    required: false
   })
   const upstream_git_token = core.getInput('upstream_git_token', {
     required: false

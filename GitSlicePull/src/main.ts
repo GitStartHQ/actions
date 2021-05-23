@@ -63,7 +63,7 @@ async function main(): Promise<void> {
   }
 
   const resp = await axios.post(
-    `https://58d3be7ba8de.ngrok.io/api/gitslice/pull`,
+    `https://gitslice-test.loca.lt/api/gitslice/pull`,
     body,
     {
       responseType: 'stream'

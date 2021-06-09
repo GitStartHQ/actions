@@ -9090,7 +9090,7 @@ process.on('unhandledRejection', handleError);
 main().catch(handleError);
 async function main() {
     const slice_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_token', {
-        required: false
+        required: true
     });
     const upstream_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
         required: false
@@ -9102,9 +9102,6 @@ async function main() {
         required: false
     });
     const upstream_git_email = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_email', {
-        required: true
-    });
-    const slice_default_branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_default_branch', {
         required: true
     });
     const slice_branch_to_push = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_branch_to_push', {
@@ -9119,6 +9116,13 @@ async function main() {
     const overide_previous_push = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('overide_previous_push', {
         required: false
     });
+    const octokit = Object(_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(slice_git_token);
+    // get from octokit library
+    const repoData = await octokit.request('GET /repos/{owner}/{repo}', {
+        owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
+        repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo
+    });
+    const slice_default_branch = repoData.data.default_branch;
     const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     const body = {
         slice_git_token,

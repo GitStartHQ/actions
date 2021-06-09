@@ -9028,7 +9028,7 @@ async function main() {
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
         git_slice_config: JSON.parse(gitSliceFile.toString())
     };
-    const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/push`, body, {
+    const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://f6d961ddf3a5.ngrok.io/api/gitslice/push`, body, {
         responseType: 'stream'
     });
     if (resp.data && resp.data.error && !resp.data.success) {

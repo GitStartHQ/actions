@@ -10,9 +10,12 @@ inputs:
   upstream_git_email:
     description: Email of git user with access to upstream repo
     required: true
+  slice_default_branch:
+    description: Primary branch on the git-sliced repo for all pull requests
+    required: true
   slice_git_token:
     description: Github access token for git-sliced repo
-    required: true
+    required: false
   upstream_git_token:
     description: Git access token for upstream repo
     required: false
@@ -21,7 +24,7 @@ inputs:
     required: true 
   slice_branch_to_push:
     description: Git branch that should be pushed to the client
-    required: true  
+    requires: true  
   push_pr: 
     description: Should pull request be created on the client side
     required: false

@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {context, getOctokit} from '@actions/github'
+import {context} from '@actions/github'
 import axios from 'axios'
 import {promises as fs} from 'fs'
 
@@ -27,35 +27,25 @@ interface GitSlicePullRequestBody {
 }
 
 async function main(): Promise<void> {
-  // Use secrets.GITHUB_TOKEN for this
   const slice_git_token = core.getInput('slice_git_token', {
-    required: true
+    required: false
   })
-
-  // Get from GitHub app installation
   const upstream_git_username = core.getInput('upstream_git_username', {
     required: false
   })
+
   const slice_git_username = core.getInput('slice_git_username', {
     required: false
   })
   const upstream_git_token = core.getInput('upstream_git_token', {
     required: false
   })
-
-  // Must provie email of gitstart bot specific to client
   const upstream_git_email = core.getInput('upstream_git_email', {
     required: true
   })
-
-  const octokit = getOctokit(slice_git_token)
-  // get from octokit library
-  const repoData = await octokit.request('GET /repos/{owner}/{repo}', {
-    owner: context.repo.owner,
-    repo: context.repo.repo
+  const slice_default_branch = core.getInput('slice_default_branch', {
+    required: true
   })
-
-  const slice_default_branch = repoData.data.default_branch
 
   const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePullRequestBody = {

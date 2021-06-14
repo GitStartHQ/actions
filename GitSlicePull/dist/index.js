@@ -125,7 +125,7 @@ async function main() {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
 }
 function isError(str) {
-    return str.toLowerCase().includes('error');
+    return str.includes('GitSlicePullError');
 }
 function ab2str(buf) {
     return String.fromCharCode.apply(null, buf);

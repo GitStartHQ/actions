@@ -8943,7 +8943,7 @@ function handleError(err) {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error: ${err}`);
 }
 function isError(str) {
-    return str.toLowerCase().includes('error');
+    return str.includes('GitSlicePushError');
 }
 function ab2str(buf) {
     return String.fromCharCode.apply(null, buf);

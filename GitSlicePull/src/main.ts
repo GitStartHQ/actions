@@ -93,7 +93,7 @@ async function main(): Promise<void> {
 }
 
 function isError(str: string) {
-  return str.toLowerCase().includes('error')
+  return str.includes('GitSlicePullError')
 }
 
 function ab2str(buf: any) {

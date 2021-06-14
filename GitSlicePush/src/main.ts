@@ -120,7 +120,7 @@ function handleError(err: any): void {
 }
 
 function isError(str: string) {
-  return str.toLowerCase().includes('error')
+  return str.includes('GitSlicePushError')
 }
 
 function ab2str(buf: any) {

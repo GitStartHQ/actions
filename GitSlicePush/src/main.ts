@@ -83,33 +83,48 @@ async function main(): Promise<void> {
     git_slice_config: JSON.parse(gitSliceFile.toString())
   }
 
-  const resp = await axios.post(
-    `https://hooks.gitstart.com/api/gitslice/push`,
-    body,
-    {
-      responseType: 'stream'
-    }
-  )
+  let retries = 3
 
-  if (resp.data && resp.data.error && !resp.data.success) {
-    console.error('got back error with push: ', resp.data.error)
-    return core.setFailed(`Unhandled error with push`)
-  }
+  while (retries > 0) {
+    try {
+      const resp = await axios.post(
+        `https://hooks.gitstart.com/api/gitslice/push`,
+        body,
+        {
+          responseType: 'stream'
+        }
+      )
 
-  // Shows response as it comes in ...
-  const stream = resp.data
-  await new Promise((res, rej) => {
-    stream.on('data', (chunk: any) => {
-      const str = ab2str(chunk)
-      if (isError(str)) {
-        rej(str)
-      } else {
-        console.log(str)
+      if (resp.data && resp.data.error && !resp.data.success) {
+        throw resp.data.error
       }
-    })
-    stream.on('end', res)
-  })
 
+      // Shows response as it comes in ...
+      const stream = resp.data
+      await new Promise((res, rej) => {
+        stream.on('data', (chunk: any) => {
+          const str = ab2str(chunk)
+          if (isError(str)) {
+            rej(str)
+          } else {
+            console.log(str)
+          }
+        })
+        stream.on('end', res)
+      })
+      break
+    } catch (error) {
+      console.error('got back error with push: ', error)
+      console.error(`Retries left = ${retries}`)
+      --retries
+      if (retries === 0) {
+        return core.setFailed(error)
+      }
+      await new Promise(res => {
+        setTimeout(res, 3000)
+      })
+    }
+  }
   core.setOutput('result', 'Success')
 }
 

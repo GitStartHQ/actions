@@ -67,7 +67,7 @@ async function main(): Promise<void> {
   while (retries > 0) {
     try {
       const resp = await axios.post(
-        `https://hooks.gitstart.com/api/gitslice/pull`,
+        `https://gitslice-test.loca.lt/api/gitslice/pull`,
         body,
         {
           responseType: 'stream'

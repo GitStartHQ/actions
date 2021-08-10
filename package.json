@@ -9,7 +9,9 @@
   "scripts": {
     "build:create-pull": "ncc build CreatePull/src/main.ts -o CreatePull/dist",
     "build:sync-issues": "ncc build SyncIssues/src/main.ts -o SyncIssues/dist",
-    "build": "npm run build:create-pull && npm run build:sync-issues",
+    "build:git-slice-pull": "ncc build GitSlicePull/src/main.ts -o GitSlicePull/dist",
+    "build:git-slice-push": "ncc build GitSlicePush/src/main.ts -o GitSlicePush/dist",
+    "build": "npm run build:create-pull && npm run build:sync-issues && npm run build:git-slice-pull && npm run build:git-slice-push",
     "format:check": "prettier --check **/*.ts",
     "format:write": "prettier --write **/*.ts",
     "lint": "eslint **/*.ts",

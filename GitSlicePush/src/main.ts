@@ -28,6 +28,8 @@ export interface GitSlicePushRequestBody {
   slice_owner: string
   slice_repo: string
 
+  no_cache?: boolean
+
   git_slice_config: GitSliceConfig
 }
 
@@ -64,6 +66,10 @@ async function main(): Promise<void> {
     required: false
   })
 
+  const no_cache = core.getInput('no_cache', {
+    required: false
+  })
+
   const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePushRequestBody = {
     slice_git_token,
@@ -80,6 +86,7 @@ async function main(): Promise<void> {
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,
 
+    no_cache,
     git_slice_config: JSON.parse(gitSliceFile.toString())
   }
 

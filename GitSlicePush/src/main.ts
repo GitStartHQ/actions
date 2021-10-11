@@ -86,7 +86,7 @@ async function main(): Promise<void> {
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,
 
-    no_cache,
+    no_cache: no_cache === 'true',
     git_slice_config: JSON.parse(gitSliceFile.toString())
   }
 

@@ -91,7 +91,6 @@ async function main(): Promise<void> {
             console.log(str)
           }
         })
-        stream.on('end', res)
       })
       break
     } catch (error) {

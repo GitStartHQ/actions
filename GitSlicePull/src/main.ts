@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import {context} from '@actions/github'
+import { context } from '@actions/github'
 import axios from 'axios'
-import {promises as fs} from 'fs'
+import { promises as fs } from 'fs'
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError)
@@ -85,6 +85,8 @@ async function main(): Promise<void> {
           const str = ab2str(chunk)
           if (isError(str)) {
             rej(str)
+          } else if (isSuccess(str)) {
+            res(str)
           } else {
             console.log(str)
           }
@@ -119,4 +121,8 @@ function ab2str(buf: any) {
 function handleError(err: any): void {
   console.error(err)
   core.setFailed(`Unhandled error: ${err}`)
+}
+
+function isSuccess(str: string) {
+  return str.includes('GitSlicePullSuccess')
 }

@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import {context} from '@actions/github'
+import { context } from '@actions/github'
 import axios from 'axios'
-import {promises as fs} from 'fs'
+import { promises as fs } from 'fs'
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError)
@@ -113,11 +113,12 @@ async function main(): Promise<void> {
           const str = ab2str(chunk)
           if (isError(str)) {
             rej(str)
+          } else if (isSuccess(str)) {
+            res(str)
           } else {
             console.log(str)
           }
         })
-        stream.on('end', res)
       })
       break
     } catch (error) {
@@ -145,6 +146,9 @@ function isError(str: string) {
   return str.includes('GitSlicePushError')
 }
 
+function isSuccess(str: string) {
+  return str.includes('GitSlicePushSuccess')
+}
 function ab2str(buf: any) {
   return String.fromCharCode.apply(null, buf)
 }

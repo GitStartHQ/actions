@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import { context } from '@actions/github'
+import {context} from '@actions/github'
 import axios from 'axios'
-import { promises as fs } from 'fs'
+import {promises as fs} from 'fs'
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError)

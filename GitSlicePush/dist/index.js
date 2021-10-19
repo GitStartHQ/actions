@@ -8930,17 +8930,26 @@ async function main() {
             // Shows response as it comes in ...
             const stream = resp.data;
             await new Promise((res, rej) => {
+                let isErrored = false, isSuccessful = false;
                 stream.on('data', (chunk) => {
                     const str = ab2str(chunk);
                     if (isError(str)) {
+                        isErrored = true;
                         rej(str);
                     }
                     else if (isSuccess(str)) {
+                        isSuccessful = true;
                         res(str);
                     }
                     else {
                         console.log(str);
                     }
+                    stream.on('end', () => {
+                        if (!isErrored && !isSuccessful) {
+                            isErrored = true;
+                            rej('Timed out response from GitSlice Hooks API. Gonna try again');
+                        }
+                    });
                 });
             });
             break;

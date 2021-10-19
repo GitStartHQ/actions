@@ -109,15 +109,26 @@ async function main(): Promise<void> {
       // Shows response as it comes in ...
       const stream = resp.data
       await new Promise((res, rej) => {
+        let isErrored = false,
+          isSuccessful = false
         stream.on('data', (chunk: any) => {
           const str = ab2str(chunk)
           if (isError(str)) {
+            isErrored = true
             rej(str)
+          } else if (isSuccess(str)) {
+            isSuccessful = true
+            res(str)
           } else {
             console.log(str)
           }
+          stream.on('end', () => {
+            if (!isErrored && !isSuccessful) {
+              isErrored = true
+              rej('Timed out response from GitSlice Hooks API. Gonna try again')
+            }
+          })
         })
-        stream.on('end', res)
       })
       break
     } catch (error) {
@@ -125,7 +136,7 @@ async function main(): Promise<void> {
       console.error(`Retries left = ${retries}`)
       --retries
       if (retries === 0) {
-        return core.setFailed(error)
+        return core.setFailed(error as Error)
       }
       await new Promise(res => {
         setTimeout(res, 3000)
@@ -145,6 +156,9 @@ function isError(str: string) {
   return str.includes('GitSlicePushError')
 }
 
+function isSuccess(str: string) {
+  return str.includes('GitSlicePushSuccess')
+}
 function ab2str(buf: any) {
   return String.fromCharCode.apply(null, buf)
 }

@@ -85,14 +85,13 @@ async function main(): Promise<void> {
           isSuccessful = false
         stream.on('data', (chunk: any) => {
           const str = ab2str(chunk)
+          console.log(str)
           if (isError(str)) {
             isErrored = true
             rej(str)
           } else if (isSuccess(str)) {
             isSuccessful = true
             res(str)
-          } else {
-            console.log(str)
           }
         })
         stream.on('end', () => {

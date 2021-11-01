@@ -116,6 +116,7 @@ async function main() {
                 let isErrored = false, isSuccessful = false;
                 stream.on('data', (chunk) => {
                     const str = ab2str(chunk);
+                    console.log(str);
                     if (isError(str)) {
                         isErrored = true;
                         rej(str);
@@ -123,9 +124,6 @@ async function main() {
                     else if (isSuccess(str)) {
                         isSuccessful = true;
                         res(str);
-                    }
-                    else {
-                        console.log(str);
                     }
                 });
                 stream.on('end', () => {

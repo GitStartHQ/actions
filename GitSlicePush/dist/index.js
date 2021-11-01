@@ -8867,6 +8867,13 @@ __webpack_require__.r(__webpack_exports__);
 
 process.on('unhandledRejection', handleError);
 main().catch(handleError);
+function conditionalBoolean(strBoolean) {
+    return strBoolean === 'true'
+        ? true
+        : strBoolean == 'false'
+            ? false
+            : undefined;
+}
 async function main() {
     const slice_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_token', {
         required: false
@@ -8911,11 +8918,11 @@ async function main() {
         slice_git_username,
         slice_branch_to_push,
         custom_commit_message,
-        overide_previous_push: overide_previous_push === 'true',
-        push_pr: push_pr === 'true',
+        overide_previous_push: conditionalBoolean(overide_previous_push),
+        push_pr: conditionalBoolean(push_pr),
         slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
-        no_cache: no_cache === 'true',
+        no_cache: conditionalBoolean(no_cache),
         git_slice_config: JSON.parse(gitSliceFile.toString())
     };
     let retries = 3;

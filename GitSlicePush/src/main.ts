@@ -13,6 +13,14 @@ interface GitSliceConfig {
   ignore: Array<string>
 }
 
+function conditionalBoolean(strBoolean: string | undefined) {
+  return strBoolean === 'true'
+    ? true
+    : strBoolean == 'false'
+    ? false
+    : undefined
+}
+
 export interface GitSlicePushRequestBody {
   slice_git_token?: string
   slice_git_username?: string
@@ -80,13 +88,13 @@ async function main(): Promise<void> {
     slice_git_username,
     slice_branch_to_push,
     custom_commit_message,
-    overide_previous_push: overide_previous_push === 'true',
-    push_pr: push_pr === 'true',
+    overide_previous_push: conditionalBoolean(overide_previous_push),
+    push_pr: conditionalBoolean(push_pr),
 
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,
 
-    no_cache: no_cache === 'true',
+    no_cache: conditionalBoolean(no_cache),
     git_slice_config: JSON.parse(gitSliceFile.toString())
   }
 

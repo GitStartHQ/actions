@@ -34,6 +34,7 @@ inputs:
   rebase_branch:
     description: Controls whether rebase should be used to update branch instead of the default merge
     required: false  
+    default: 'false'
 runs:
   using: node12
   main: dist/index.js

@@ -24,12 +24,15 @@ inputs:
     required: true 
   slice_branch_to_push:
     description: Git branch that should be pushed to the client
-    requires: true  
+    required: true  
   push_pr: 
     description: Should pull request be created on the client side
     required: false
   overide_previous_push:
     description: Overides previous push (force push) if set to true
+    required: false  
+  rebase_branch:
+    description: Controls whether rebase should be used to update branch instead of the default merge
     required: false  
 runs:
   using: node12

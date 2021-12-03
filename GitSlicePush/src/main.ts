@@ -32,7 +32,7 @@ export interface GitSlicePushRequestBody {
   custom_commit_message: string
   push_pr?: boolean
   overide_previous_push?: boolean
-
+  rebase_branch?: boolean
   slice_owner: string
   slice_repo: string
 
@@ -73,6 +73,9 @@ async function main(): Promise<void> {
   const overide_previous_push = core.getInput('overide_previous_push', {
     required: false
   })
+  const rebase_branch = core.getInput('rebase_branch', {
+    required: false
+  })
 
   const no_cache = core.getInput('no_cache', {
     required: false
@@ -90,6 +93,7 @@ async function main(): Promise<void> {
     custom_commit_message,
     overide_previous_push: conditionalBoolean(overide_previous_push),
     push_pr: conditionalBoolean(push_pr),
+    rebase_branch: conditionalBoolean(rebase_branch),
 
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,

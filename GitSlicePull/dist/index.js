@@ -89,6 +89,9 @@ async function main() {
     const slice_default_branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_default_branch', {
         required: true
     });
+    const branch_to_pull = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('branch_to_pull', {
+        required: false
+    });
     const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     const body = {
         slice_git_token,
@@ -97,6 +100,7 @@ async function main() {
         upstream_git_token,
         slice_default_branch,
         slice_git_username,
+        branch_to_pull,
         slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
         git_slice_config: JSON.parse(gitSliceFile.toString())

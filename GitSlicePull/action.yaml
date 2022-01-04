@@ -19,6 +19,9 @@ inputs:
   upstream_git_token:
     description: Github Access Token for upstream repo
     required: false
+  branch_to_pull:
+    description: Branch to pull if different from main
+    required: false
 runs:
   using: node12
   main: dist/index.js

@@ -24,7 +24,7 @@ inputs:
     required: true 
   slice_branch_to_push:
     description: Git branch that should be pushed to the client
-    requires: true  
+    required: true
   no_cache:
     description: 'Disable cache? true/false'
     required: false
@@ -34,6 +34,10 @@ inputs:
   overide_previous_push:
     description: Overides previous push (force push) if set to true
     required: false  
+  rebase_branch:
+    description: Controls whether rebase should be used to update branch instead of the default merge
+    required: false  
+    default: 'false'
 runs:
   using: node12
   main: dist/index.js

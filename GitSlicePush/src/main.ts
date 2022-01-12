@@ -13,6 +13,14 @@ interface GitSliceConfig {
   ignore: Array<string>
 }
 
+function conditionalBoolean(strBoolean: string | undefined) {
+  return strBoolean === 'true'
+    ? true
+    : strBoolean == 'false'
+    ? false
+    : undefined
+}
+
 export interface GitSlicePushRequestBody {
   slice_git_token?: string
   slice_git_username?: string
@@ -24,7 +32,7 @@ export interface GitSlicePushRequestBody {
   custom_commit_message: string
   push_pr?: boolean
   overide_previous_push?: boolean
-
+  rebase_branch?: boolean
   slice_owner: string
   slice_repo: string
 
@@ -65,6 +73,9 @@ async function main(): Promise<void> {
   const overide_previous_push = core.getInput('overide_previous_push', {
     required: false
   })
+  const rebase_branch = core.getInput('rebase_branch', {
+    required: false
+  })
 
   const no_cache = core.getInput('no_cache', {
     required: false
@@ -80,13 +91,14 @@ async function main(): Promise<void> {
     slice_git_username,
     slice_branch_to_push,
     custom_commit_message,
-    overide_previous_push: overide_previous_push === 'true',
-    push_pr: push_pr === 'true',
+    overide_previous_push: conditionalBoolean(overide_previous_push),
+    push_pr: conditionalBoolean(push_pr),
+    rebase_branch: conditionalBoolean(rebase_branch),
 
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,
 
-    no_cache: no_cache === 'true',
+    no_cache: conditionalBoolean(no_cache),
     git_slice_config: JSON.parse(gitSliceFile.toString())
   }
 
@@ -109,15 +121,25 @@ async function main(): Promise<void> {
       // Shows response as it comes in ...
       const stream = resp.data
       await new Promise((res, rej) => {
+        let isErrored = false,
+          isSuccessful = false
         stream.on('data', (chunk: any) => {
           const str = ab2str(chunk)
+          console.log(str)
           if (isError(str)) {
+            isErrored = true
             rej(str)
-          } else {
-            console.log(str)
+          } else if (isSuccess(str)) {
+            isSuccessful = true
+            res(str)
           }
+          stream.on('end', () => {
+            if (!isErrored && !isSuccessful) {
+              isErrored = true
+              rej('Timed out response from GitSlice Hooks API. Gonna try again')
+            }
+          })
         })
-        stream.on('end', res)
       })
       break
     } catch (error) {
@@ -125,7 +147,7 @@ async function main(): Promise<void> {
       console.error(`Retries left = ${retries}`)
       --retries
       if (retries === 0) {
-        return core.setFailed(error)
+        return core.setFailed(error as Error)
       }
       await new Promise(res => {
         setTimeout(res, 3000)
@@ -145,6 +167,9 @@ function isError(str: string) {
   return str.includes('GitSlicePushError')
 }
 
+function isSuccess(str: string) {
+  return str.includes('GitSlicePushSuccess')
+}
 function ab2str(buf: any) {
   return String.fromCharCode.apply(null, buf)
 }

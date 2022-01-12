@@ -1,5 +1,5 @@
-name: "GitSlicePull"
-description: "An action to pull changes into a git-sliced repo"
+name: "GitSlicePush"
+description: "An action to push changes into a git-sliced repo"
 inputs:
   slice_git_username:
     description: Username of the git user with access to sliced repo
@@ -24,7 +24,10 @@ inputs:
     required: true 
   slice_branch_to_push:
     description: Git branch that should be pushed to the client
-    required: true  
+    required: true
+  no_cache:
+    description: 'Disable cache? true/false'
+    required: false
   push_pr: 
     description: Should pull request be created on the client side
     required: false

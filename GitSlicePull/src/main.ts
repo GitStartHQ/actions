@@ -19,11 +19,23 @@ interface GitSlicePullRequestBody {
   upstream_git_username?: string
   upstream_git_email: string
   upstream_git_token?: string
+  branch_to_pull?: string
   slice_default_branch: string
   slice_owner: string
   slice_repo: string
 
   git_slice_config: GitSliceConfig
+
+  is_open_source?: boolean
+}
+
+// TODO: refactor this to share code between pull and push
+function conditionalBoolean(strBoolean: string | undefined) {
+  return strBoolean === 'true'
+    ? true
+    : strBoolean == 'false'
+    ? false
+    : undefined
 }
 
 async function main(): Promise<void> {
@@ -46,6 +58,13 @@ async function main(): Promise<void> {
   const slice_default_branch = core.getInput('slice_default_branch', {
     required: true
   })
+  const branch_to_pull = core.getInput('branch_to_pull', {
+    required: false
+  })
+
+  const is_open_source = core.getInput('is_open_source', {
+    required: false
+  })
 
   const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePullRequestBody = {
@@ -55,7 +74,8 @@ async function main(): Promise<void> {
     upstream_git_token,
     slice_default_branch,
     slice_git_username,
-
+    is_open_source: conditionalBoolean(is_open_source),
+    branch_to_pull,
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,
 

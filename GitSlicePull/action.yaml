@@ -19,6 +19,9 @@ inputs:
   upstream_git_token:
     description: Github Access Token for upstream repo
     required: false
+  is_open_source:
+    description: Boolean marker for open source project
+    required: false
 runs:
   using: node12
   main: dist/index.js

@@ -37,6 +37,7 @@ export interface GitSlicePushRequestBody {
   slice_repo: string
 
   no_cache?: boolean
+  is_open_source?: boolean
 
   git_slice_config: GitSliceConfig
 }
@@ -81,6 +82,10 @@ async function main(): Promise<void> {
     required: false
   })
 
+  const is_open_source = core.getInput('is_open_source', {
+    required: false
+  })
+
   const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePushRequestBody = {
     slice_git_token,
@@ -91,6 +96,8 @@ async function main(): Promise<void> {
     slice_git_username,
     slice_branch_to_push,
     custom_commit_message,
+
+    is_open_source: conditionalBoolean(is_open_source),
     overide_previous_push: conditionalBoolean(overide_previous_push),
     push_pr: conditionalBoolean(push_pr),
     rebase_branch: conditionalBoolean(rebase_branch),

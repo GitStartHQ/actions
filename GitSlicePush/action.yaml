@@ -38,6 +38,9 @@ inputs:
     description: Controls whether rebase should be used to update branch instead of the default merge
     required: false  
     default: 'false'
+  is_open_source:
+    description: Boolean marker for open source project
+    required: false
 runs:
   using: node12
   main: dist/index.js

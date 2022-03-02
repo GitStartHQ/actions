@@ -1,5 +1,5 @@
-name: "GitSlicePull"
-description: "An action to pull changes into a git-sliced repo"
+name: 'GitSlicePull'
+description: 'An action to pull changes into a git-sliced repo'
 inputs:
   slice_git_username:
     description: Username of the Git User with access to sliced repo
@@ -21,6 +21,9 @@ inputs:
     required: false
   is_open_source:
     description: Boolean marker for open source project
+    required: false
+  branch_to_pull:
+    description: Branch to pull if different from main
     required: false
 runs:
   using: node12

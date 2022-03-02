@@ -19,6 +19,7 @@ interface GitSlicePullRequestBody {
   upstream_git_username?: string
   upstream_git_email: string
   upstream_git_token?: string
+  branch_to_pull?: string
   slice_default_branch: string
   slice_owner: string
   slice_repo: string
@@ -57,6 +58,9 @@ async function main(): Promise<void> {
   const slice_default_branch = core.getInput('slice_default_branch', {
     required: true
   })
+  const branch_to_pull = core.getInput('branch_to_pull', {
+    required: false
+  })
 
   const is_open_source = core.getInput('is_open_source', {
     required: false
@@ -71,6 +75,7 @@ async function main(): Promise<void> {
     slice_default_branch,
     slice_git_username,
     is_open_source: conditionalBoolean(is_open_source),
+    branch_to_pull,
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,
 

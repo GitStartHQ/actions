@@ -103,6 +103,7 @@ async function main(): Promise<void> {
       await new Promise((res, rej) => {
         let isErrored = false,
           isSuccessful = false
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         stream.on('data', (chunk: any) => {
           const str = ab2str(chunk)
           console.log(str)
@@ -141,6 +142,7 @@ function isError(str: string) {
   return str.includes('GitSlicePullError')
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ab2str(buf: any) {
   return String.fromCharCode.apply(null, buf)
 }

@@ -12,7 +12,7 @@
     "build:git-slice-pull": "ncc build GitSlicePull/src/main.ts -o GitSlicePull/dist",
     "build:git-slice-pull-platform": "ncc build GitSlicePullPlatform/src/main.ts -o GitSlicePullPlatform/dist",
     "build:git-slice-push": "ncc build GitSlicePush/src/main.ts -o GitSlicePush/dist",
-    "build": "npm run build:create-pull && npm run build:sync-issues && npm run build:git-slice-pull && npm run build:git-slice-push",
+    "build": "npm run build:create-pull && npm run build:sync-issues && npm run build:git-slice-pull && npm run build:git-slice-pull-platform && npm run build:git-slice-push",
     "format:check": "prettier --check **/*.ts",
     "format:write": "prettier --write **/*.ts",
     "lint": "eslint **/*.ts",

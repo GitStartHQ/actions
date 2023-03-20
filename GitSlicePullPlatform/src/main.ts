@@ -44,7 +44,7 @@ async function main(): Promise<void> {
   const gitSliceFile = await fs.readFile('./git-slice.json')
 
   // Prepare request
-  const endpoint = 'https://git-service.gitstart.dev/graphql'
+  const endpoint = 'https://gateway.gitstart.com/graphql'
   const headers = {
     'content-type': 'application/json'
   }

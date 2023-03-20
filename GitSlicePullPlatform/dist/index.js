@@ -9802,7 +9802,7 @@ async function main() {
     });
     const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     // Prepare request
-    const endpoint = 'https://git-service.gitstart.dev/graphql';
+    const endpoint = 'https://gateway.gitstart.com/graphql';
     const headers = {
         'content-type': 'application/json'
     };

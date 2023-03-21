@@ -9768,7 +9768,6 @@ __nccwpck_require__.r(__webpack_exports__);
 
 process.on('unhandledRejection', handleError);
 main().catch(handleError);
-// TODO: refactor this to share code between pull and push
 function conditionalBoolean(strBoolean) {
     return strBoolean === 'true'
         ? true
@@ -9777,78 +9776,85 @@ function conditionalBoolean(strBoolean) {
             : undefined;
 }
 async function main() {
-    const slice_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_token', {
+    // Read environment values
+    const slicedRepoToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_token', {
         required: false
     });
-    const upstream_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
+    const slicedRepoUsername = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_username', {
         required: false
     });
-    const slice_git_username = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_git_username', {
-        required: false
-    });
-    const upstream_git_token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_token', {
-        required: false
-    });
-    const upstream_git_email = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_email', {
+    const slicedRepoBranch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_default_branch', {
         required: true
     });
-    const slice_default_branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slice_default_branch', {
-        required: true
-    });
-    const branch_to_pull = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('branch_to_pull', {
+    const slicedRepoOwner = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner;
+    const slicedRepoName = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo;
+    const upstreamRepoToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_token', {
         required: false
+    });
+    const upstreamRepoUsername = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_username', {
+        required: false
+    });
+    const upstreamRepoEmail = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('upstream_git_email', {
+        required: true
     });
     const is_open_source = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('is_open_source', {
         required: false
     });
     const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
-    const body = {
-        slice_git_token,
-        upstream_git_username,
-        upstream_git_email,
-        upstream_git_token,
-        slice_default_branch,
-        slice_git_username,
-        is_open_source: conditionalBoolean(is_open_source),
-        branch_to_pull,
-        slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
-        slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
-        git_slice_config: JSON.parse(gitSliceFile.toString())
+    // Prepare request
+    const endpoint = 'https://gateway.gitstart.com/graphql';
+    const headers = {
+        'content-type': 'application/json'
+    };
+    const query = `
+  mutation Pull($input: ExecuteGitSlicePullInput!) {
+    executeGitSlicePull(input: $input) {
+      result
+      logs
+    }
+  }
+  `;
+    const variables = {
+        input: {
+            slicedRepoToken: slicedRepoToken,
+            slicedRepoUsername: slicedRepoUsername,
+            slicedRepoBranch: slicedRepoBranch,
+            slicedRepoName: slicedRepoName,
+            slicedRepoOwner: slicedRepoOwner,
+            upstreamRepoToken: upstreamRepoToken,
+            upstreamRepoUsername: upstreamRepoUsername,
+            upstreamRepoEmail: upstreamRepoEmail,
+            config: JSON.parse(gitSliceFile.toString()),
+            isOpenSource: conditionalBoolean(is_open_source)
+        }
+    };
+    const graphqlQuery = {
+        query: query,
+        variables: variables
     };
     let retries = 3;
     while (retries > 0) {
         try {
-            const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/pull`, body, {
-                responseType: 'stream'
+            const response = await axios__WEBPACK_IMPORTED_MODULE_2___default()({
+                url: endpoint,
+                method: 'post',
+                headers: headers,
+                data: graphqlQuery
             });
-            if (resp.data && resp.data.error && !resp.data.success) {
-                throw resp.data.error;
+            if (response.data && response.data.error && !response.data.success) {
+                const errorsMessages = response.data.errors.map((error) => error.message);
+                const errorMessage = errorsMessages.join('\n');
+                throw errorMessage;
             }
-            // Shows response as it comes in ...
-            const stream = resp.data;
-            await new Promise((res, rej) => {
-                let isErrored = false, isSuccessful = false;
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                stream.on('data', (chunk) => {
-                    const str = ab2str(chunk);
-                    console.log(str);
-                    if (isError(str)) {
-                        isErrored = true;
-                        rej(str);
-                    }
-                    else if (isSuccess(str)) {
-                        isSuccessful = true;
-                        res(str);
-                    }
-                });
-                stream.on('end', () => {
-                    if (!isErrored && !isSuccessful) {
-                        isErrored = true;
-                        rej('Timed out response from GitSlice Hooks API. Gonna try again');
-                    }
-                });
-            });
-            break;
+            const pullResult = response.data.data.executeGitSlicePull;
+            const logs = pullResult.logs;
+            logs.map((log) => console.log(log));
+            if (pullResult.result == 'SUCCESS') {
+                return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
+            }
+            else {
+                return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(logs.length > 0 ? logs[logs.length - 1] : 'Call to Hooks failed');
+            }
         }
         catch (error) {
             console.error('got back error with pull: ', error);
@@ -9857,27 +9863,17 @@ async function main() {
             if (retries === 0) {
                 return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error);
             }
+            // Sleep for 3 seconds before retrying
             await new Promise(res => {
                 setTimeout(res, 3000);
             });
         }
     }
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
-}
-function isError(str) {
-    return str.includes('GitSlicePullError');
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function ab2str(buf) {
-    return String.fromCharCode.apply(null, buf);
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleError(err) {
     console.error(err);
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Unhandled error: ${err}`);
-}
-function isSuccess(str) {
-    return str.includes('GitSlicePullSuccess');
 }
 
 })();

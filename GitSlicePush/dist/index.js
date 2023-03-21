@@ -9851,6 +9851,7 @@ async function main() {
             const stream = resp.data;
             await new Promise((res, rej) => {
                 let isErrored = false, isSuccessful = false;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 stream.on('data', (chunk) => {
                     const str = ab2str(chunk);
                     console.log(str);
@@ -9897,6 +9898,7 @@ function isError(str) {
 function isSuccess(str) {
     return str.includes('GitSlicePushSuccess');
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ab2str(buf) {
     return String.fromCharCode.apply(null, buf);
 }

@@ -49,6 +49,8 @@ async function main(): Promise<void> {
     'content-type': 'application/json'
   }
 
+  console.log(conditionalBoolean(is_open_source))
+
   const query = `
   mutation Pull($input: ExecuteGitSlicePullInput!) {
     executeGitSlicePull(input: $input) {

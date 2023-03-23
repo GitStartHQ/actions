@@ -39,7 +39,7 @@ async function main(): Promise<void> {
   })
 
   const is_open_source = core.getInput('is_open_source', {
-    required: false
+    required: true
   })
   const gitSliceFile = await fs.readFile('./git-slice.json')
 

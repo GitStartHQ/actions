@@ -37,7 +37,11 @@ async function main(): Promise<void> {
   const upstreamRepoEmail = core.getInput('upstream_git_email', {
     required: true
   })
-
+  const upstreamOwner = core.getInput('upstream_owner', {
+    required: false
+  })
+  console.log(`Upstream owner: ${upstreamOwner}`);
+  
   const is_open_source = core.getInput('is_open_source', {
     required: false
   })
@@ -73,7 +77,7 @@ async function main(): Promise<void> {
       isOpenSource: conditionalBoolean(is_open_source)
     }
   }
-
+  
   const graphqlQuery = {
     query: query,
     variables: variables

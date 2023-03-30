@@ -89,6 +89,8 @@ async function main(): Promise<void> {
         headers: headers,
         data: graphqlQuery
       })
+      
+      console.log(`Data: ${response.data}`);
 
       if (response.data && response.data.error) {
         const errorsMessages = response.data.errors.map(

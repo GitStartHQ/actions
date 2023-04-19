@@ -8914,6 +8914,9 @@ async function main() {
     const is_open_source = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('is_open_source', {
         required: false
     });
+    const is_draft = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('is_draft', {
+        required: false
+    });
     const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     const body = {
         slice_git_token,
@@ -8925,6 +8928,7 @@ async function main() {
         slice_branch_to_push,
         custom_commit_message,
         is_open_source: conditionalBoolean(is_open_source),
+        is_draft: conditionalBoolean(is_draft),
         overide_previous_push: conditionalBoolean(overide_previous_push),
         push_pr: conditionalBoolean(push_pr),
         rebase_branch: conditionalBoolean(rebase_branch),

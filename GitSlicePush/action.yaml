@@ -45,6 +45,9 @@ inputs:
   is_open_source:
     description: Boolean marker for open source project
     required: false
+  is_draft:
+    description: Boolean marker for creating a draft PR or not (only works for first push, defaults to false)
+    required: false
 runs:
   using: node12
   main: dist/index.js

@@ -91,6 +91,15 @@ async function main(): Promise<void> {
     required: false
   })
 
+  const gitslice_pull_url_input = core.getInput('gitslice_pull_url', {
+    required: false
+  })
+
+  const gitslice_pull_url =
+    gitslice_pull_url_input === ''
+      ? 'https://hooks.gitstart.com/api/gitslice/pull'
+      : gitslice_pull_url_input
+
   const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePushRequestBody = {
     slice_git_token,
@@ -119,13 +128,9 @@ async function main(): Promise<void> {
 
   while (retries > 0) {
     try {
-      const resp = await axios.post(
-        `https://hooks.gitstart.com/api/gitslice/push`,
-        body,
-        {
-          responseType: 'stream'
-        }
-      )
+      const resp = await axios.post(gitslice_pull_url, body, {
+        responseType: 'stream'
+      })
 
       if (resp.data && resp.data.error && !resp.data.success) {
         throw resp.data.error

@@ -44,6 +44,9 @@ inputs:
   is_draft:
     description: Boolean marker for creating a draft PR or not (only works for first push, defaults to false)
     required: false
+  gitslice_push_url:
+    description: URL endpoint of the GitSlice Push API
+    required: false
 runs:
   using: node12
   main: dist/index.js

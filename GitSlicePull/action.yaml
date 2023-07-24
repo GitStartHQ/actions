@@ -25,6 +25,9 @@ inputs:
   branch_to_pull:
     description: Branch to pull if different from main
     required: false
+  gitslice_pull_url:
+    description: URL endpoint of the GitSlice Pull API
+    required: false
 runs:
   using: node12
   main: dist/index.js

@@ -8917,12 +8917,12 @@ async function main() {
     const is_draft = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('is_draft', {
         required: false
     });
-    const gitslice_pull_url_input = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('gitslice_pull_url', {
+    const gitslice_push_url_input = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('gitslice_push_url', {
         required: false
     });
-    const gitslice_pull_url = gitslice_pull_url_input === ''
-        ? 'https://hooks.gitstart.com/api/gitslice/pull'
-        : gitslice_pull_url_input;
+    const gitslice_push_url = gitslice_push_url_input === ''
+        ? 'https://hooks.gitstart.com/api/gitslice/push'
+        : gitslice_push_url_input;
     const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     const body = {
         slice_git_token,
@@ -8946,7 +8946,7 @@ async function main() {
     let retries = 3;
     while (retries > 0) {
         try {
-            const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(gitslice_pull_url, body, {
+            const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(gitslice_push_url, body, {
                 responseType: 'stream'
             });
             if (resp.data && resp.data.error && !resp.data.success) {

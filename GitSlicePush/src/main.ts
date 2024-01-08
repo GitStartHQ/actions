@@ -115,57 +115,45 @@ async function main(): Promise<void> {
     git_slice_config: JSON.parse(gitSliceFile.toString())
   }
 
-  let retries = 3
-
-  while (retries > 0) {
-    try {
-      const resp = await axios.post(
-        `https://hooks.gitstart.com/api/gitslice/push`,
-        body,
-        {
-          responseType: 'stream'
-        }
-      )
-
-      if (resp.data && resp.data.error && !resp.data.success) {
-        throw resp.data.error
+  try {
+    const resp = await axios.post(
+      `https://hooks.gitstart.com/api/gitslice/push`,
+      body,
+      {
+        responseType: 'stream'
       }
+    )
 
-      // Shows response as it comes in ...
-      const stream = resp.data
-      await new Promise((res, rej) => {
-        let isErrored = false,
-          isSuccessful = false
-        stream.on('data', (chunk: any) => {
-          const str = ab2str(chunk)
-          console.log(str)
-          if (isError(str)) {
+    if (resp.data && resp.data.error && !resp.data.success) {
+      throw resp.data.error
+    }
+
+    // Shows response as it comes in ...
+    const stream = resp.data
+    await new Promise((res, rej) => {
+      let isErrored = false,
+        isSuccessful = false
+      stream.on('data', (chunk: any) => {
+        const str = ab2str(chunk)
+        console.log(str)
+        if (isError(str)) {
+          isErrored = true
+          rej(str)
+        } else if (isSuccess(str)) {
+          isSuccessful = true
+          res(str)
+        }
+        stream.on('end', () => {
+          if (!isErrored && !isSuccessful) {
             isErrored = true
-            rej(str)
-          } else if (isSuccess(str)) {
-            isSuccessful = true
-            res(str)
+            rej('Timed out response from GitSlice Hooks API. Gonna try again')
           }
-          stream.on('end', () => {
-            if (!isErrored && !isSuccessful) {
-              isErrored = true
-              rej('Timed out response from GitSlice Hooks API. Gonna try again')
-            }
-          })
         })
       })
-      break
-    } catch (error) {
-      console.error('got back error with push: ', error)
-      console.error(`Retries left = ${retries}`)
-      --retries
-      if (retries === 0) {
-        return core.setFailed(error as Error)
-      }
-      await new Promise(res => {
-        setTimeout(res, 3000)
-      })
-    }
+    })
+  } catch (error) {
+    console.error('got back error with push: ', error)
+    return core.setFailed(error as Error)
   }
   core.setOutput('result', 'Success')
 }

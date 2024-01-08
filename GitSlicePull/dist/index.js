@@ -117,51 +117,40 @@ async function main() {
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
         git_slice_config: JSON.parse(gitSliceFile.toString())
     };
-    let retries = 3;
-    while (retries > 0) {
-        try {
-            const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/pull`, body, {
-                responseType: 'stream'
-            });
-            if (resp.data && resp.data.error && !resp.data.success) {
-                throw resp.data.error;
-            }
-            // Shows response as it comes in ...
-            const stream = resp.data;
-            await new Promise((res, rej) => {
-                let isErrored = false, isSuccessful = false;
-                stream.on('data', (chunk) => {
-                    const str = ab2str(chunk);
-                    console.log(str);
-                    if (isError(str)) {
-                        isErrored = true;
-                        rej(str);
-                    }
-                    else if (isSuccess(str)) {
-                        isSuccessful = true;
-                        res(str);
-                    }
-                });
-                stream.on('end', () => {
-                    if (!isErrored && !isSuccessful) {
-                        isErrored = true;
-                        rej('Timed out response from GitSlice Hooks API. Gonna try again');
-                    }
-                });
-            });
-            break;
+    try {
+        const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/pull`, body, {
+            responseType: 'stream'
+        });
+        if (resp.data && resp.data.error && !resp.data.success) {
+            throw resp.data.error;
         }
-        catch (error) {
-            console.error('got back error with pull: ', error);
-            console.error(`Retries left = ${retries}`);
-            --retries;
-            if (retries === 0) {
-                return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error);
-            }
-            await new Promise(res => {
-                setTimeout(res, 3000);
+        // Shows response as it comes in ...
+        const stream = resp.data;
+        await new Promise((res, rej) => {
+            let isErrored = false, isSuccessful = false;
+            stream.on('data', (chunk) => {
+                const str = ab2str(chunk);
+                console.log(str);
+                if (isError(str)) {
+                    isErrored = true;
+                    rej(str);
+                }
+                else if (isSuccess(str)) {
+                    isSuccessful = true;
+                    res(str);
+                }
             });
-        }
+            stream.on('end', () => {
+                if (!isErrored && !isSuccessful) {
+                    isErrored = true;
+                    rej('Timed out response from GitSlice Hooks API. Gonna try again');
+                }
+            });
+        });
+    }
+    catch (error) {
+        console.error('got back error with pull: ', error);
+        return _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error);
     }
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('result', 'Success');
 }

@@ -31,10 +31,6 @@ inputs:
   push_pr: 
     description: Should pull request be created on the client side
     required: false
-  dismiss_reviews: 
-    description: Should reviews that request changes be dismissed upon pushing
-    required: false
-    default: 'false'
   overide_previous_push:
     description: Overides previous push (force push) if set to true
     required: false  

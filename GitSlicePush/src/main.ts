@@ -31,7 +31,6 @@ export interface GitSlicePushRequestBody {
   slice_branch_to_push: string
   custom_commit_message: string
   push_pr?: boolean
-  dismiss_reviews?: boolean
   overide_previous_push?: boolean
   rebase_branch?: boolean
   slice_owner: string
@@ -73,9 +72,6 @@ async function main(): Promise<void> {
   const push_pr = core.getInput('push_pr', {
     required: false
   })
-  const dismiss_reviews = core.getInput('dismiss_reviews', {
-    required: false
-  })
   const overide_previous_push = core.getInput('overide_previous_push', {
     required: false
   })
@@ -110,7 +106,6 @@ async function main(): Promise<void> {
     is_draft: conditionalBoolean(is_draft),
     overide_previous_push: conditionalBoolean(overide_previous_push),
     push_pr: conditionalBoolean(push_pr),
-    dismiss_reviews: conditionalBoolean(dismiss_reviews),
     rebase_branch: conditionalBoolean(rebase_branch),
 
     slice_owner: context.repo.owner,
@@ -141,7 +136,6 @@ async function main(): Promise<void> {
       await new Promise((res, rej) => {
         let isErrored = false,
           isSuccessful = false
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         stream.on('data', (chunk: any) => {
           const str = ab2str(chunk)
           console.log(str)
@@ -189,8 +183,6 @@ function isError(str: string) {
 function isSuccess(str: string) {
   return str.includes('GitSlicePushSuccess')
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ab2str(buf: any) {
   return String.fromCharCode.apply(null, buf)
 }

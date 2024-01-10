@@ -62,9 +62,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(545);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(747);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
-
 
 
 
@@ -103,7 +100,6 @@ async function main() {
     const is_open_source = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('is_open_source', {
         required: false
     });
-    const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     const body = {
         slice_git_token,
         upstream_git_username,
@@ -114,8 +110,7 @@ async function main() {
         is_open_source: conditionalBoolean(is_open_source),
         branch_to_pull,
         slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
-        slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
-        git_slice_config: JSON.parse(gitSliceFile.toString())
+        slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo
     };
     try {
         const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/pull`, body, {

@@ -1,17 +1,9 @@
 import * as core from '@actions/core'
 import {context} from '@actions/github'
 import axios from 'axios'
-import {promises as fs} from 'fs'
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError)
-
-interface GitSliceConfig {
-  repoUrl: string
-  folders: Array<string>
-  branch: string
-  ignore: Array<string>
-}
 
 interface GitSlicePullRequestBody {
   slice_git_token?: string
@@ -23,9 +15,6 @@ interface GitSlicePullRequestBody {
   slice_default_branch: string
   slice_owner: string
   slice_repo: string
-
-  git_slice_config: GitSliceConfig
-
   is_open_source?: boolean
 }
 
@@ -66,7 +55,6 @@ async function main(): Promise<void> {
     required: false
   })
 
-  const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePullRequestBody = {
     slice_git_token,
     upstream_git_username,
@@ -77,9 +65,7 @@ async function main(): Promise<void> {
     is_open_source: conditionalBoolean(is_open_source),
     branch_to_pull,
     slice_owner: context.repo.owner,
-    slice_repo: context.repo.repo,
-
-    git_slice_config: JSON.parse(gitSliceFile.toString())
+    slice_repo: context.repo.repo
   }
 
   try {

@@ -1,17 +1,9 @@
 import * as core from '@actions/core'
 import {context} from '@actions/github'
 import axios from 'axios'
-import {promises as fs} from 'fs'
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError)
-
-interface GitSliceConfig {
-  repoUrl: string
-  folders: Array<string>
-  branch: string
-  ignore: Array<string>
-}
 
 function conditionalBoolean(strBoolean: string | undefined) {
   return strBoolean === 'true'
@@ -39,8 +31,6 @@ export interface GitSlicePushRequestBody {
   no_cache?: boolean
   is_open_source?: boolean
   is_draft?: boolean
-
-  git_slice_config: GitSliceConfig
 }
 
 async function main(): Promise<void> {
@@ -91,7 +81,6 @@ async function main(): Promise<void> {
     required: false
   })
 
-  const gitSliceFile = await fs.readFile('./git-slice.json')
   const body: GitSlicePushRequestBody = {
     slice_git_token,
     upstream_git_username,
@@ -111,8 +100,7 @@ async function main(): Promise<void> {
     slice_owner: context.repo.owner,
     slice_repo: context.repo.repo,
 
-    no_cache: conditionalBoolean(no_cache),
-    git_slice_config: JSON.parse(gitSliceFile.toString())
+    no_cache: conditionalBoolean(no_cache)
   }
 
   try {

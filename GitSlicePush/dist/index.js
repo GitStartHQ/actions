@@ -8859,9 +8859,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(545);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(747);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
-
 
 
 
@@ -8917,7 +8914,6 @@ async function main() {
     const is_draft = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('is_draft', {
         required: false
     });
-    const gitSliceFile = await fs__WEBPACK_IMPORTED_MODULE_3__.promises.readFile('./git-slice.json');
     const body = {
         slice_git_token,
         upstream_git_username,
@@ -8934,8 +8930,7 @@ async function main() {
         rebase_branch: conditionalBoolean(rebase_branch),
         slice_owner: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner,
         slice_repo: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo,
-        no_cache: conditionalBoolean(no_cache),
-        git_slice_config: JSON.parse(gitSliceFile.toString())
+        no_cache: conditionalBoolean(no_cache)
     };
     try {
         const resp = await axios__WEBPACK_IMPORTED_MODULE_2___default().post(`https://hooks.gitstart.com/api/gitslice/push`, body, {

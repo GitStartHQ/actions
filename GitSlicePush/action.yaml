@@ -1,5 +1,5 @@
-name: "GitSlicePush"
-description: "An action to push changes into a git-sliced repo"
+name: 'GitSlicePush'
+description: 'An action to push changes into a git-sliced repo'
 inputs:
   slice_git_username:
     description: Username of the git user with access to sliced repo
@@ -9,7 +9,7 @@ inputs:
     required: false
   upstream_git_email:
     description: Email of git user with access to upstream repo
-    required: true
+    required: false
   slice_default_branch:
     description: Primary branch on the git-sliced repo for all pull requests
     required: true
@@ -21,22 +21,22 @@ inputs:
     required: false
   custom_commit_message:
     description: Git commit message for the upstream repo
-    required: true 
+    required: true
   slice_branch_to_push:
     description: Git branch that should be pushed to the client
     required: true
   no_cache:
     description: 'Disable cache? true/false'
     required: false
-  push_pr: 
+  push_pr:
     description: Should pull request be created on the client side
     required: false
   overide_previous_push:
     description: Overides previous push (force push) if set to true
-    required: false  
+    required: false
   rebase_branch:
     description: Controls whether rebase should be used to update branch instead of the default merge
-    required: false  
+    required: false
     default: 'false'
   is_open_source:
     description: Boolean marker for open source project

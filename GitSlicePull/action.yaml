@@ -9,7 +9,7 @@ inputs:
     required: false
   upstream_git_email:
     description: Email of Git User with access to upstream repo
-    required: true
+    required: false
   slice_default_branch:
     description: Primary branch on the git-sliced repo for all pull requests
     required: true

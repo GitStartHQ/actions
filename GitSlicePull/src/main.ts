@@ -9,7 +9,7 @@ interface GitSlicePullRequestBody {
   slice_git_token?: string
   slice_git_username?: string
   upstream_git_username?: string
-  upstream_git_email: string
+  upstream_git_email?: string
   upstream_git_token?: string
   branch_to_pull?: string
   slice_default_branch: string
@@ -42,7 +42,7 @@ async function main(): Promise<void> {
     required: false
   })
   const upstream_git_email = core.getInput('upstream_git_email', {
-    required: true
+    required: false
   })
   const slice_default_branch = core.getInput('slice_default_branch', {
     required: true

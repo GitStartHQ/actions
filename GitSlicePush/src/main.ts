@@ -48,7 +48,7 @@ async function main(): Promise<void> {
     required: false
   })
   const upstream_git_email = core.getInput('upstream_git_email', {
-    required: true
+    required: false
   })
   const slice_default_branch = core.getInput('slice_default_branch', {
     required: true

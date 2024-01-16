@@ -7,10 +7,6 @@ main().catch(handleError)
 
 interface GitSlicePullRequestBody {
   slice_git_token?: string
-  slice_git_username?: string
-  upstream_git_username?: string
-  upstream_git_email?: string
-  upstream_git_token?: string
   branch_to_pull?: string
   slice_default_branch: string
   slice_owner: string
@@ -31,19 +27,6 @@ async function main(): Promise<void> {
   const slice_git_token = core.getInput('slice_git_token', {
     required: false
   })
-  const upstream_git_username = core.getInput('upstream_git_username', {
-    required: false
-  })
-
-  const slice_git_username = core.getInput('slice_git_username', {
-    required: false
-  })
-  const upstream_git_token = core.getInput('upstream_git_token', {
-    required: false
-  })
-  const upstream_git_email = core.getInput('upstream_git_email', {
-    required: false
-  })
   const slice_default_branch = core.getInput('slice_default_branch', {
     required: true
   })
@@ -57,11 +40,7 @@ async function main(): Promise<void> {
 
   const body: GitSlicePullRequestBody = {
     slice_git_token,
-    upstream_git_username,
-    upstream_git_email,
-    upstream_git_token,
     slice_default_branch,
-    slice_git_username,
     is_open_source: conditionalBoolean(is_open_source),
     branch_to_pull,
     slice_owner: context.repo.owner,

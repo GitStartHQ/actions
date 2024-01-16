@@ -15,14 +15,9 @@ function conditionalBoolean(strBoolean: string | undefined) {
 
 export interface GitSlicePushRequestBody {
   slice_git_token?: string
-  slice_git_username?: string
-  upstream_git_username?: string
-  upstream_git_email: string
-  upstream_git_token?: string
   slice_default_branch: string
   slice_branch_to_push: string
   custom_commit_message: string
-  push_pr?: boolean
   overide_previous_push?: boolean
   rebase_branch?: boolean
   slice_owner: string
@@ -30,26 +25,13 @@ export interface GitSlicePushRequestBody {
 
   no_cache?: boolean
   is_open_source?: boolean
-  is_draft?: boolean
 }
 
 async function main(): Promise<void> {
   const slice_git_token = core.getInput('slice_git_token', {
     required: false
   })
-  const upstream_git_username = core.getInput('upstream_git_username', {
-    required: false
-  })
 
-  const slice_git_username = core.getInput('slice_git_username', {
-    required: false
-  })
-  const upstream_git_token = core.getInput('upstream_git_token', {
-    required: false
-  })
-  const upstream_git_email = core.getInput('upstream_git_email', {
-    required: false
-  })
   const slice_default_branch = core.getInput('slice_default_branch', {
     required: true
   })
@@ -59,9 +41,7 @@ async function main(): Promise<void> {
   const custom_commit_message = core.getInput('custom_commit_message', {
     required: true
   })
-  const push_pr = core.getInput('push_pr', {
-    required: false
-  })
+
   const overide_previous_push = core.getInput('overide_previous_push', {
     required: false
   })
@@ -77,24 +57,14 @@ async function main(): Promise<void> {
     required: false
   })
 
-  const is_draft = core.getInput('is_draft', {
-    required: false
-  })
-
   const body: GitSlicePushRequestBody = {
     slice_git_token,
-    upstream_git_username,
-    upstream_git_email,
-    upstream_git_token,
     slice_default_branch,
-    slice_git_username,
     slice_branch_to_push,
     custom_commit_message,
 
     is_open_source: conditionalBoolean(is_open_source),
-    is_draft: conditionalBoolean(is_draft),
     overide_previous_push: conditionalBoolean(overide_previous_push),
-    push_pr: conditionalBoolean(push_pr),
     rebase_branch: conditionalBoolean(rebase_branch),
 
     slice_owner: context.repo.owner,
